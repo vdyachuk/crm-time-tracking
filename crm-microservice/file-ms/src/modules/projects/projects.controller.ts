@@ -1,16 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { Controller, Body, HttpStatus, Post } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { ProjectData, ProjectInput } from '../projects/model';
+import { ProjectPipe } from '../projects/flow/';
 
-import { Project } from '../../entities/project.entity';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
 export class ProjectsController {
     constructor(private readonly projectsService: ProjectsService) {}
 
-    @Get()
-    @MessagePattern({ role: 'project', cmd: 'get-all' })
-    async getAll(): Promise<Project[]> {
-        return await this.projectsService.getAll();
+    @Post()
+    @ApiResponse({ status: HttpStatus.CREATED, type: ProjectData })
+    async create(@Body(ProjectPipe) input: ProjectInput): Promise<ProjectData> {
+        const project = await this.projectsService.create(input);
+        return project.buildData();
     }
 }

@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { ProjectData } from '../modules/projects/model';
 
 @Entity()
 export class Project {
@@ -22,4 +23,10 @@ export class Project {
 
     @DeleteDateColumn({ type: 'timestamp without time zone', name: 'deleted_at', nullable: true })
     public deletedAt: Date;
+
+    public buildData(): ProjectData {
+        return {
+            name: this.name
+        };
+    }
 }

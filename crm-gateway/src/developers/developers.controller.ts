@@ -7,7 +7,7 @@ export class DevelopersController {
     constructor(private readonly developersService: DevelopersService) {}
 
     @Get()
-    getFile() {
+    getAll() {
         return this.developersService.getAll();
     }
 }
