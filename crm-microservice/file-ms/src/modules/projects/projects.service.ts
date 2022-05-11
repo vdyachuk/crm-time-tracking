@@ -12,6 +12,10 @@ export class ProjectsService {
         private projectsRepository: Repository<Project>
     ) {}
 
+    async getAll(): Promise<Project[]> {
+        return this.projectsRepository.find();
+    }
+
     async create(input: ProjectInput): Promise<Project> {
         const project = new Project();
         project.name = input.name;
