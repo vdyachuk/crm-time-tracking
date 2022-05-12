@@ -1,7 +1,8 @@
-import { Controller, Body, HttpStatus, Post, Get } from '@nestjs/common';
+import { Controller, Body, HttpStatus, Post, Get, Put, Param, Delete } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { ProjectData, ProjectInput } from '../projects/model';
 import { ProjectPipe } from '../projects/flow/';
+import { UpdateProjectDto } from '../projects/dto';
 
 import { ProjectsService } from './projects.service';
 
@@ -22,5 +23,16 @@ export class ProjectsController {
     async create(@Body(ProjectPipe) input: ProjectInput): Promise<ProjectData> {
         const project = await this.projectsService.create(input);
         return project.buildData();
+    }
+
+    @Put('project')
+    @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectData })
+    async update(@Param('id') projectId: number, @Body('project') projectData: UpdateProjectDto) {
+        return await this.projectsService.update(projectId, projectData);
+    }
+    @Delete('users/:id')
+    @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectData })
+    async delete(@Param() params) {
+        return await this.projectsService.delete(params.id);
     }
 }
