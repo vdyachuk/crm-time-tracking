@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { config } = require('../config/index');
+const { config } = require('../config');
 const { Roles } = require('../services/user');
 
 exports.authenticate = (req, res, next) => {

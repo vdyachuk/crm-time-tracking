@@ -7,7 +7,7 @@ const { createJWT, verifyJWT } = require('../utils/jwt');
 const { sendConfirmToken, emailType } = require('../utils/mailer');
 const { SessionService } = require('../services/session');
 const { UserService, Roles } = require('../services/user');
-const { config } = require('../config/index');
+const { config } = require('../config');
 
 class AuthController {
     static async registraition(req, res) {

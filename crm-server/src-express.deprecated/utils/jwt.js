@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { config } = require('../config/index');
+const { config } = require('../config');
 
 exports.createJWT = (user, duration) => {
     const payload = {

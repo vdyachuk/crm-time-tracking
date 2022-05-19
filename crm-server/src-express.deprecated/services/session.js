@@ -1,5 +1,5 @@
 const Session = require('../models/session');
-const { config } = require('../config/index');
+const { config } = require('../config');
 
 class SessionService {
     static async addRefreshSession(refreshSession) {

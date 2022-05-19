@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { config } = require('../config/index');
+const { config } = require('../config');
 
 exports.emailType = {
     confirmRegistration: 'registration',
