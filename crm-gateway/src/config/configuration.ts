@@ -3,14 +3,16 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const configuration = {
-    port: parseInt(process.env.PORT, 10) || 3003,
-    services: {
-        movieServer: {
-            host: process.env.SERVER_URL
-        },
-        fileMs: {
-            host: process.env.FILE_MS_HOST,
-            port: parseInt(process.env.FILE_MS_PORT, 10) || 3007
-        }
+    port: parseInt(process.env.PORT, 10) || 3007,
+    host: process.env.HOST,
+    database: {
+        type: 'postgres',
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        entities: ['dist/entities/*.entity.{ts,js}'],
+        synchronize: false
     }
 };
