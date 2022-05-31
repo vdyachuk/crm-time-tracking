@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Developer } from './developers.model';
+import { Developer } from '../../interface/developers.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateDeveloperDto } from './dto/create-developer.dto';
 import { RolesService } from '../roles/roles.service';

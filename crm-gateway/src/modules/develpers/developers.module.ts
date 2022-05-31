@@ -5,9 +5,9 @@ import { DevelopersController } from './developers.controller';
 import { DevelopersService } from './developers.service';
 
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Developer } from './developers.model';
-import { Role } from '../roles/roles.model';
-import { DeveloperRoles } from '../roles/developer-roles.model';
+import { Developer } from '../../interface/developers.model';
+import { Role } from '../../interface/roles.model';
+import { DeveloperRoles } from '../../entities/role.entity';
 import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
 import { forwardRef } from '@nestjs/common';

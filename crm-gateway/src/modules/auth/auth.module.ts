@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { DevelopersModule } from '../developers/developers.module';
+import { DevelopersModule } from '../develpers/developers.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({

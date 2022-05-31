@@ -1,1 +1,1 @@
-export { ProjectPipe } from '../flow/project.pipe';
+export { ProjectPipe } from './project.pipe';

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreateDeveloperDto } from './dto/create-developer.dto';
 import { DevelopersService } from './developers.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Developer } from './developers.model';
+import { Developer } from '../../interface/developers.model';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { AddRoleDto } from './dto/add-role.dto';

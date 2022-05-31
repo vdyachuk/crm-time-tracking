@@ -2,20 +2,18 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Developer } from './modules/developers/developers.model';
-import { Role } from './modules/roles/roles.model';
-import { DeveloperRoles } from './modules/roles/developer-roles.model';
+import { Developer } from './interface/developers.model';
+import { Role } from './interface/roles.model';
+import { DeveloperRoles } from './entities/role.entity';
 import * as path from 'path';
 
-import { DevelopersModule } from './modules/developers/developers.module';
+import { DevelopersModule } from './modules/develpers/developers.module';
 import { FilesModule } from './modules/files/files.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
-    controllers: [],
-    providers: [],
     imports: [
         ConfigModule.forRoot({
             envFilePath: `.${process.env.NODE_ENV}.env`
