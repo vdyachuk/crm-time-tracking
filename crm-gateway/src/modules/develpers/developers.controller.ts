@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, HttpStatus } from '@nestjs/common';
 import { CreateDeveloperDto } from './dto/create-developer.dto';
 import { DevelopersService } from './developers.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -13,14 +13,14 @@ export class DevelopersController {
     constructor(private developersService: DevelopersService) {}
 
     @ApiOperation({ summary: 'Create developer' })
-    @ApiResponse({ status: 200, type: Developer })
+    @ApiResponse({ status: HttpStatus.CREATED, type: Developer })
     @Post()
     create(@Body() developerDto: CreateDeveloperDto) {
         return this.developersService.createDeveloper(developerDto);
     }
 
     @ApiOperation({ summary: 'Get all developers' })
-    @ApiResponse({ status: 200, type: [Developer] })
+    @ApiResponse({ status: HttpStatus.OK, type: [Developer] })
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Get()
@@ -29,7 +29,7 @@ export class DevelopersController {
     }
 
     @ApiOperation({ summary: 'Giv a role' })
-    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: HttpStatus.OK })
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Post('/role')

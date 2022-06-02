@@ -17,12 +17,6 @@ export class Developer {
     @Column()
     salary: number;
 
-    @Column()
-    extraRate: number;
-
-    @Column()
-    bonus: number;
-
     @CreateDateColumn({ type: 'timestamp without time zone', name: 'created_at' })
     public createdAt: Date;
 
