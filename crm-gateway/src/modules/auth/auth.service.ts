@@ -1,32 +1,57 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateDeveloperDto } from '../develpers/dto/create-developer.dto';
-import { DevelopersService } from '../develpers/developers.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcryptjs';
-import { Developer } from '../../interface/developers.model';
+
+import { User } from '../../entities/user.entity';
+import { SignUp } from './dto/sign-up.dto';
+import { JwtPayload } from '../../interface/jwt-payload.interface';
+import { UserService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private developerService: DevelopersService, private jwtService: JwtService) {}
+    constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-    async login(developerDto: CreateDeveloperDto) {
-        const developer = await this.validateDeveloper(developerDto);
-        return this.generateToken(developer);
+    async register(signUp: SignUp): Promise<User> {
+        const user = await this.userService.create(signUp);
+        delete user.password;
+
+        return user;
     }
 
-    private async generateToken(developer: Developer) {
-        const payload = { email: developer.email, id: developer.id, roles: developer.roles };
-        return {
-            token: this.jwtService.sign(payload)
-        };
-    }
+    async login(email: string, password: string): Promise<User> {
+        let user: User;
 
-    private async validateDeveloper(developerDto: CreateDeveloperDto) {
-        const developer = await this.developerService.getDeveloperByEmail(developerDto.email);
-        const passwordEquals = await bcrypt.compare(developerDto.password, developer.password);
-        if (developer && passwordEquals) {
-            return developer;
+        try {
+            user = await this.userService.findOne({ where: { email } });
+        } catch (err) {
+            throw new UnauthorizedException(`There isn't any user with email: ${email}`);
         }
-        throw new UnauthorizedException({ message: 'Incorect email or password' });
+
+        if (!(await user.checkPassword(password))) {
+            throw new UnauthorizedException(`Wrong password for user with email: ${email}`);
+        }
+        delete user.password;
+
+        return user;
+    }
+
+    async verifyPayload(payload: JwtPayload): Promise<User> {
+        let user: User;
+
+        try {
+            user = await this.userService.findOne({ where: { email: payload.sub } });
+        } catch (error) {
+            throw new UnauthorizedException(`There isn't any user with email: ${payload.sub}`);
+        }
+        delete user.password;
+
+        return user;
+    }
+
+    signToken(user: User): string {
+        const payload = {
+            sub: user.email
+        };
+
+        return this.jwtService.sign(payload);
     }
 }

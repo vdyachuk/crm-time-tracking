@@ -1,21 +1,30 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+
+import { UserModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { DevelopersModule } from '../develpers/developers.module';
-import { JwtModule } from '@nestjs/jwt';
+import { SessionSerializer } from './session.serializer';
+import { JwtStrategy } from '../auth/strategies/jwt.strategy';
+import { LocalStrategy } from '../auth/strategies/local.strategy';
 
 @Module({
-    controllers: [AuthController],
-    providers: [AuthService],
     imports: [
-        forwardRef(() => DevelopersModule),
+        UserModule,
+        PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
-            secret: process.env.PRIVATE_KEY || 'SECRET',
+            secret: process.env.APP_SECRET,
             signOptions: {
-                expiresIn: '24h'
+                expiresIn: '1d',
+                algorithm: 'HS384'
+            },
+            verifyOptions: {
+                algorithms: ['HS384']
             }
         })
     ],
-    exports: [AuthService, JwtModule]
+    controllers: [AuthController],
+    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer]
 })
 export class AuthModule {}

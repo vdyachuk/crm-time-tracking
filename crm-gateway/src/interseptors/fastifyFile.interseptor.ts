@@ -37,7 +37,6 @@ export function FastifyFilesInterceptor(
             await new Promise<void>((resolve, reject) =>
                 this.multer.array(fieldName, maxCount)(ctx.getRequest(), ctx.getResponse(), (error: any) => {
                     if (error) {
-                        // const error = transformException(err);
                         return reject(error);
                     }
                     resolve();

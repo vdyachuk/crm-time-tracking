@@ -5,9 +5,13 @@ import { ValidationPipe } from './common/flow/validation.pipe';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import helmet from 'fastify-helmet';
 import { contentParser } from 'fastify-multer';
+import { setup } from './setup';
 
+import { configuration } from './config/configuration';
+const port = process.env.PORT || 3000;
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+    setup(app);
     app.register(helmet, {
         contentSecurityPolicy: {
             directives: {
@@ -19,7 +23,6 @@ async function bootstrap() {
         }
     });
     app.register(contentParser);
-    const PORT = process.env.PORT || 5000;
     const config = new DocumentBuilder()
         .setTitle('BACKEND')
         .setDescription('REST API')
@@ -31,7 +34,7 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe());
 
-    await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
+    await app.listen(configuration.port, () => console.log(`Server started on port = ${port}`));
 }
 
 bootstrap();

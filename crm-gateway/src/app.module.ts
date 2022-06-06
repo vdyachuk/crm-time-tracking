@@ -1,41 +1,27 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { Developer } from './interface/developers.model';
-import { Role } from './interface/roles.model';
-import { DeveloperRoles } from './entities/role.entity';
-import * as path from 'path';
+import { configuration } from './config/configuration';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health/health.controller';
 
-import { DevelopersModule } from './modules/develpers/developers.module';
+import { UserModule } from './modules/users/users.module';
 import { FilesModule } from './modules/files/files.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { RolesModule } from './modules/roles/roles.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection, ConnectionOptions } from 'typeorm';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            envFilePath: `.${process.env.NODE_ENV}.env`
-        }),
-        ServeStaticModule.forRoot({
-            rootPath: path.resolve(__dirname, 'static')
-        }),
-        SequelizeModule.forRoot({
-            dialect: 'postgres',
-            host: process.env.POSTGRES_HOST,
-            port: Number(process.env.POSTGRESS_PORT),
-            username: process.env.POSTGRES_USER,
-            password: process.env.POSTGRESS_PASSWORD,
-            database: process.env.POSTGRES_DB,
-            models: [Developer, Role, DeveloperRoles],
-            autoLoadModels: true
-        }),
-        DevelopersModule,
+        TypeOrmModule.forRoot(configuration.database as ConnectionOptions),
+        UserModule,
+        TerminusModule,
         FilesModule,
         ProjectsModule,
-        AuthModule,
-        RolesModule
-    ]
+        AuthModule
+    ],
+    controllers: [HealthController],
+    providers: []
 })
-export class AppModule {}
+export class AppModule {
+    constructor(private connection: Connection) {}
+}
