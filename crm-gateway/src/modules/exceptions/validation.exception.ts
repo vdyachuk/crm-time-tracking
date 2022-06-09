@@ -4,7 +4,7 @@ export class ValidationException extends HttpException {
     messages;
 
     constructor(response) {
-        super(response, HttpStatus.BAD_REQUEST);
+        super(response, HttpStatus.UNPROCESSABLE_ENTITY);
         this.messages = response;
     }
 }

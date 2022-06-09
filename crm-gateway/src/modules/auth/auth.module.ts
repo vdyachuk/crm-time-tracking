@@ -6,8 +6,8 @@ import { UserModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SessionSerializer } from './session.serializer';
-import { JwtStrategy } from '../auth/strategies/jwt.strategy';
-import { LocalStrategy } from '../auth/strategies/local.strategy';
+import { JwtStrategy } from 'src/config/jwt.strategy.configuration';
+import { LocalStrategy } from 'src/config/local.strategy.configuration';
 
 @Module({
     imports: [

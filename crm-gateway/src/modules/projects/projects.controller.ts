@@ -25,12 +25,12 @@ export class ProjectsController {
         return project.buildData();
     }
 
-    @Put('project')
+    @Put(':id')
     @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectData })
     async update(@Param('id') projectId: number, @Body('project') projectData: UpdateProjectDto) {
         return await this.projectsService.update(projectId, projectData);
     }
-    @Delete('users/:id')
+    @Delete(':id')
     @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectData })
     async delete(@Param() params) {
         return await this.projectsService.delete(params.id);

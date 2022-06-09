@@ -34,7 +34,7 @@ export class LoggedDaysService {
         return await this.loggedDaysRepository.save(updated);
     }
     async delete(id: number): Promise<DeleteResult> {
-        return await this.loggedDaysRepository.delete({ id: id });
+        return await this.loggedDaysRepository.delete({ id });
     }
     private buildLoggedDayRO(loggedDay: LoggedDay) {
         const loggedDayRO = {

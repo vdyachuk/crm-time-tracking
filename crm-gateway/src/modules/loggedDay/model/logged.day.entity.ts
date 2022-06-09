@@ -11,7 +11,7 @@ export class LoggedDay {
     public id: number;
 
     @Column()
-    public projectID: number;
+    public projectId: number;
 
     @Column()
     public time: Date;
@@ -35,7 +35,7 @@ export class LoggedDay {
         return {
             dayData: this.dayData,
             id: this.id,
-            projectID: this.projectID,
+            projectID: this.projectId,
             time: this.time,
             desctiption: this.desctiption,
             hours: this.hours,

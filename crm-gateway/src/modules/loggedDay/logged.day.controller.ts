@@ -6,7 +6,7 @@ import { UpdateLoggedDayDto } from '../loggedDay/dto/logged.day.update';
 
 import { LoggedDaysService } from './logged.day.service';
 
-@Controller('loggedday')
+@Controller('loggedDay')
 export class LoggedDaysController {
     constructor(private readonly loggedDaysService: LoggedDaysService) {}
 
@@ -25,12 +25,12 @@ export class LoggedDaysController {
         return loggedDay.buildData();
     }
 
-    @Put('loggedDay')
+    @Put(':id')
     @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
     async update(@Param('id') loggedDayId: number, @Body('loggedDay') loggedDayData: UpdateLoggedDayDto) {
         return await this.loggedDaysService.update(loggedDayId, loggedDayData);
     }
-    @Delete('loggedDay/:id')
+    @Delete(':id')
     @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
     async delete(@Param() params) {
         return await this.loggedDaysService.delete(params.id);
