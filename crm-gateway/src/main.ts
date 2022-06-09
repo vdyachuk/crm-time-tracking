@@ -6,9 +6,10 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import helmet from 'fastify-helmet';
 import { contentParser } from 'fastify-multer';
 import { setup } from './setup';
+import { configService } from './config/config.service';
 
-import { configuration } from './config/configuration';
-const port = process.env.PORT || 3000;
+const port = configService.getPort();
+
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
     setup(app);
@@ -34,7 +35,7 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe());
 
-    await app.listen(configuration.port, () => console.log(`Server started on port = ${port}`));
+    await app.listen(port, () => console.log(`Server started on port = ${port}`));
 }
 
 bootstrap();

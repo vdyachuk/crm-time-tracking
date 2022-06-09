@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { configuration } from './config/configuration';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health/health.controller';
 
@@ -7,11 +6,11 @@ import { UserModule } from './modules/users/users.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, ConnectionOptions } from 'typeorm';
+import { configService } from './config/config.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot(configuration.database as ConnectionOptions),
+        TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
         UserModule,
         TerminusModule,
         ProjectsModule,
@@ -20,6 +19,4 @@ import { Connection, ConnectionOptions } from 'typeorm';
     controllers: [HealthController],
     providers: []
 })
-export class AppModule {
-    constructor(private connection: Connection) {}
-}
+export class AppModule {}
