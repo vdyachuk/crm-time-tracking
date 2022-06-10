@@ -17,7 +17,7 @@ export class AuthService {
         return user;
     }
 
-    async login(email: string, password: string): Promise<User> {
+    async login(email: string, password: string, salt: string): Promise<User> {
         let user: User;
 
         try {
@@ -26,7 +26,7 @@ export class AuthService {
             throw new UnauthorizedException(`There isn't any user with email: ${email}`);
         }
 
-        if (!(await user.checkPassword(password))) {
+        if (!(await user.checkPassword(password, salt))) {
             throw new UnauthorizedException(`Wrong password for user with email: ${email}`);
         }
         delete user.password;

@@ -1,14 +1,6 @@
-import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
 import { Exclude } from 'class-transformer';
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    BeforeInsert,
-    BeforeUpdate
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -25,6 +17,9 @@ export class User {
     @Exclude()
     password: string;
 
+    @Column()
+    salt: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -35,16 +30,19 @@ export class User {
         Object.assign(this, data);
     }
 
-    @BeforeInsert()
-    @BeforeUpdate()
-    async hashPassword(): Promise<void> {
-        const salt = await bcrypt.genSalt();
-        if (!/^\$2a\$\d+\$/.test(this.password)) {
-            this.password = await bcrypt.hash(this.password, salt);
-        }
-    }
+    async checkPassword(plainPassword: string, salt: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const iterations = 50000;
+            const keylen = 64;
+            const digest = 'sha512';
 
-    async checkPassword(plainPassword: string): Promise<boolean> {
-        return await bcrypt.compare(plainPassword, this.password);
+            crypto.pbkdf2(plainPassword, salt, iterations, keylen, digest, (err, key) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(key.toString('hex'));
+                }
+            });
+        });
     }
 }

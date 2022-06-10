@@ -3,8 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 require('dotenv').config();
 
 class ConfigService {
-
-    constructor(private env: { [k: string]: string | undefined }) { }
+    constructor(private env: { [k: string]: string | undefined }) {}
 
     private getValue(key: string, throwOnMissing = true): string {
         const value = this.env[key];
@@ -16,7 +15,7 @@ class ConfigService {
     }
 
     public ensureValues(keys: string[]) {
-        keys.forEach(k => this.getValue(k, true));
+        keys.forEach((k) => this.getValue(k, true));
         return this;
     }
 
@@ -45,20 +44,18 @@ class ConfigService {
 
             migrations: ['src/migration/*.ts'],
 
-            ssl: this.isProduction(),
+            ssl: this.isProduction()
         };
     }
-
 }
 
-const configService = new ConfigService(process.env)
-    .ensureValues([
-        'PORT',
-        'DB_HOST',
-        'DB_PORT',
-        'DB_USER',
-        'DB_PASSWORD',
-        'DB_NAME'
-    ]);
+const configService = new ConfigService(process.env).ensureValues([
+    'PORT',
+    'DB_HOST',
+    'DB_PORT',
+    'DB_USER',
+    'DB_PASSWORD',
+    'DB_NAME'
+]);
 
 export { configService };
