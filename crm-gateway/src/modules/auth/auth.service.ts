@@ -10,8 +10,8 @@ import { UserService } from '../users/users.service';
 export class AuthService {
     constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-    async register(signUp: SignUp): Promise<User> {
-        const user = await this.userService.create(signUp);
+    async register(dto: SignUp): Promise<User> {
+        const user = await this.userService.create(dto);
         delete user.password;
 
         return user;
@@ -23,11 +23,11 @@ export class AuthService {
         try {
             user = await this.userService.findOne({ where: { email } });
         } catch (err) {
-            throw new UnauthorizedException(`There isn't any user with email: ${email}`);
+            throw new UnauthorizedException(`Incorrect password or email: ${email}`);
         }
 
         if (!(await user.checkPassword(password, salt))) {
-            throw new UnauthorizedException(`Wrong password for user with email: ${email}`);
+            throw new UnauthorizedException(`Incorrect password or email: ${email}`);
         }
         delete user.password;
 
