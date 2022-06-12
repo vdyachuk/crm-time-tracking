@@ -1,16 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
-import { contentParser } from 'fastify-multer';
-import helmet from 'fastify-helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from './common/flow/validation.pipe';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import helmet from 'fastify-helmet';
+import { contentParser } from 'fastify-multer';
+import { setup } from './setup';
+import { configService } from './config/config.service';
 
-import { configuration } from './config/configuration';
+const port = configService.getPort();
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
-
+    setup(app);
     app.register(helmet, {
         contentSecurityPolicy: {
             directives: {
@@ -21,21 +23,19 @@ async function bootstrap() {
             }
         }
     });
-
     app.register(contentParser);
-
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-
-    const options = new DocumentBuilder()
-        .setTitle('X - API')
-        .setDescription('API Gateway')
-        .setVersion('1.0')
-        .addBearerAuth()
+    const config = new DocumentBuilder()
+        .setTitle('BACKEND')
+        .setDescription('REST API')
+        .setVersion('1.0.0')
+        .addTag('Time Tracking')
         .build();
-    const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('api', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('/api/docs', app, document);
 
-    await app.listen(configuration.port);
+    app.useGlobalPipes(new ValidationPipe());
+
+    await app.listen(port, () => console.log(`Server started on port = ${port}`));
 }
 
 bootstrap();
