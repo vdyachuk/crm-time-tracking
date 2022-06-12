@@ -1,2 +1,2 @@
-export { JoiValidationPipe } from '../flow/joi-validation.pipe';
-export { ValidationPipe } from '../flow/validation.pipe';
+export { JoiValidationPipe } from './joi-validation.pipe';
+export { ValidationPipe } from './validation.pipe';

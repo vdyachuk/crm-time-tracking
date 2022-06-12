@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { mock } from 'jest-mock-extended';
 import { Repository } from 'typeorm';
 
-import { ProfileController } from '../profile/profile.controller';
+import { ProfileController } from './profile.controller';
 import { User } from '../../../entities/user.entity';
 import { UserService } from '../users.service';
 

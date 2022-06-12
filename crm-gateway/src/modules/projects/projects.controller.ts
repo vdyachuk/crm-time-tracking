@@ -1,8 +1,8 @@
 import { Controller, Body, HttpStatus, Post, Get, Put, Param, Delete } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { ProjectData, ProjectInput } from '../projects/model';
-import { ProjectPipe } from '../projects/flow/';
-import { UpdateProjectDto } from '../projects/dto';
+import { ProjectData, ProjectInput } from './model';
+import { ProjectPipe } from './flow';
+import { UpdateProjectDto } from './dto';
 
 import { ProjectsService } from './projects.service';
 

@@ -1,8 +1,8 @@
 import { Controller, Body, HttpStatus, Post, Get, Put, Param, Delete } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { LoggedDayData, LoggedDayInput } from '../loggedDay/model';
-import { LoggedDayPipe } from '../loggedDay/flow/logged.day.pipe';
-import { UpdateLoggedDayDto } from '../loggedDay/dto/logged.day.update';
+import { LoggedDayData, LoggedDayInput } from './model';
+import { LoggedDayPipe } from './flow/logged.day.pipe';
+import { UpdateLoggedDayDto } from './dto/logged.day.update';
 
 import { LoggedDaysService } from './logged.day.service';
 
