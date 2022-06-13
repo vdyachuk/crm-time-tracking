@@ -18,9 +18,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@commitlint/config-conventional": "^17.0.2",
     "@nestjs/axios": "^0.0.5",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.1.0",
@@ -59,6 +61,7 @@
     "typeorm": "^0.3.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.2",
     "@faker-js/faker": "^7.1.0",
     "@jackfranklin/test-data-bot": "^2.0.0",
     "@nestjs/cli": "^8.0.0",
@@ -69,12 +72,14 @@
     "@types/node": "^16.0.0",
     "@types/pbkdf2": "^3.1.0",
     "@types/supertest": "^2.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "dotenv": "^16.0.0",
-    "eslint": "^8.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.0",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.0.1",
     "express-session": "^1.17.3",
     "faker": "^6.6.6",
     "jest": "^27.2.5",

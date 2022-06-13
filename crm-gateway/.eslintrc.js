@@ -1,26 +1,32 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    tsconfigRootDir: 'gateway',
-    tsconfigRootDir: __dirname,
-    sourceType: 'module',
+  'env': {
+    'browser': true,
+    'es2021': true,
+    'node': true,
+    'jest': true,
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
+  'ignorePatterns': ['.eslintrc.js'],
+  'extends': [
+    'google',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  root: true,
-  env: {
-    node: true,
-    jest: true,
+  'parser': '@typescript-eslint/parser',
+  'parserOptions': {
+    'ecmaVersion': 'latest',
+    'sourceType': 'module',
+    'project': 'tsconfig.json',
+    'sourceType': 'module',
   },
-  ignorePatterns: ['.eslintrc.js'],
-  rules: {
+  'root': 'true',
+  'plugins': [
+    '@typescript-eslint',
+  ],
+  'rules': {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
   },
 };
