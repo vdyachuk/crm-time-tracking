@@ -1,32 +1,31 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'es2021': true,
-    'node': true,
-    'jest': true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    project: 'tsconfig.json',
+    sourceType: 'module',
   },
-  'ignorePatterns': ['.eslintrc.js'],
-  'extends': [
-    'google',
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaVersion': 'latest',
-    'sourceType': 'module',
-    'project': 'tsconfig.json',
-    'sourceType': 'module',
+  root: true,
+  env: {
+    node: true,
+    jest: true,
   },
-  'root': 'true',
-  'plugins': [
-    '@typescript-eslint',
-  ],
-  'rules': {
+  ignorePatterns: ['.eslintrc.js'],
+  rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
+  },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
   },
 };
