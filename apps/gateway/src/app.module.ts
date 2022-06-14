@@ -9,14 +9,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/config.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-        UserModule,
-        TerminusModule,
-        ProjectsModule,
-        AuthModule,
-    ],
-    controllers: [HealthController],
-    providers: [],
+  imports: [
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    UserModule,
+    TerminusModule,
+    ProjectsModule,
+    AuthModule,
+  ],
+  controllers: [HealthController],
+  providers: [],
 })
 export class AppModule {}

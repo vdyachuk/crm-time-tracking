@@ -1,7 +1,7 @@
 export interface LoggedDayData {
-    dayData: string;
+  dayData: string;
 }
 
 export interface LoggedDayRO {
-    loggedDay: LoggedDayData;
+  loggedDay: LoggedDayData;
 }

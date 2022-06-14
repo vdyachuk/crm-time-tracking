@@ -1,3 +1,3 @@
 export class UpdateLoggedDayDto {
-    readonly dayData: string;
+  readonly dayData: string;
 }

@@ -4,22 +4,22 @@ import { User } from './user.entity';
 
 @Entity()
 export class Profile {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Column()
-    phone: string;
+  @Column()
+  phone: string;
 
-    @Column('date')
-    birthday: Date;
+  @Column('date')
+  birthday: Date;
 
-    @Column()
-    website: string;
+  @Column()
+  website: string;
 
-    @Column()
-    occupation: string;
+  @Column()
+  occupation: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
-    user: User;
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }

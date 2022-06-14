@@ -7,33 +7,33 @@ import { UserUpdate } from './dto/user-update.dto';
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
-    ) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-    async create(data: Partial<User>): Promise<User> {
-        return this.userRepository.save(new User(data));
+  async create(data: Partial<User>): Promise<User> {
+    return this.userRepository.save(new User(data));
+  }
+
+  async findOne(where: FindOneOptions<User>): Promise<User> {
+    const user = await this.userRepository.findOne(where);
+
+    if (!user) {
+      throw new NotFoundException(`There isn't any user with identifier: ${where}`);
     }
 
-    async findOne(where: FindOneOptions<User>): Promise<User> {
-        const user = await this.userRepository.findOne(where);
+    return user;
+  }
 
-        if (!user) {
-            throw new NotFoundException(`There isn't any user with identifier: ${where}`);
-        }
+  async update(id: number, updates: UserUpdate): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
 
-        return user;
+    if (!user) {
+      throw new NotFoundException(`There isn't any user with id: ${id}`);
     }
+    Object.assign(user, updates);
 
-    async update(id: number, updates: UserUpdate): Promise<User> {
-        const user = await this.userRepository.findOne({ where: { id } });
-
-        if (!user) {
-            throw new NotFoundException(`There isn't any user with id: ${id}`);
-        }
-        Object.assign(user, updates);
-
-        return this.userRepository.save(user);
-    }
+    return this.userRepository.save(user);
+  }
 }

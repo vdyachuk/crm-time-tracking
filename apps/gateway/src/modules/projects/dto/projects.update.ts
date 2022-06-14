@@ -1,3 +1,3 @@
 export class UpdateProjectDto {
-    readonly name: string;
+  readonly name: string;
 }

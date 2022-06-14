@@ -3,44 +3,44 @@ import { LoggedDayData } from '../modules/loggedDay/model';
 
 @Entity()
 export class LoggedDay {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    dayData: string;
+  @Column()
+  dayData: string;
 
-    @Column()
-    projectId: number;
+  @Column()
+  projectId: number;
 
-    @Column()
-    time: Date;
+  @Column()
+  time: Date;
 
-    @Column()
-    desctiption: string;
+  @Column()
+  desctiption: string;
 
-    @Column()
-    hours: number;
+  @Column()
+  hours: number;
 
-    @Column()
-    day: number;
+  @Column()
+  day: number;
 
-    @Column()
-    month: string;
+  @Column()
+  month: string;
 
-    @Column()
-    year: number;
+  @Column()
+  year: number;
 
-    public buildData(): LoggedDayData {
-        return {
-            id: this.id,
-            dayData: this.dayData,
-            projectID: this.projectId,
-            time: this.time,
-            desctiption: this.desctiption,
-            hours: this.hours,
-            day: this.day,
-            month: this.month,
-            year: this.year,
-        };
-    }
+  public buildData(): LoggedDayData {
+    return {
+      id: this.id,
+      dayData: this.dayData,
+      projectID: this.projectId,
+      time: this.time,
+      desctiption: this.desctiption,
+      hours: this.hours,
+      day: this.day,
+      month: this.month,
+      year: this.year,
+    };
+  }
 }

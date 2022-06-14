@@ -1,7 +1,7 @@
 export interface ProjectData {
-    name: string;
+  name: string;
 }
 
 export interface ProjectRO {
-    project: ProjectData;
+  project: ProjectData;
 }

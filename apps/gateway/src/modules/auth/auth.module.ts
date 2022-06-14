@@ -11,21 +11,21 @@ import { JwtStrategy } from '../../config/jwt.strategy.configuration';
 import { LocalStrategy } from 'src/config/local.strategy.configuration';
 
 @Module({
-    imports: [
-        UserModule,
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.register({
-            secret: process.env.APP_SECRET,
-            signOptions: {
-                expiresIn: '1d',
-                algorithm: 'HS384',
-            },
-            verifyOptions: {
-                algorithms: ['HS384'],
-            },
-        }),
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
+  imports: [
+    UserModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: process.env.APP_SECRET,
+      signOptions: {
+        expiresIn: '1d',
+        algorithm: 'HS384',
+      },
+      verifyOptions: {
+        algorithms: ['HS384'],
+      },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
 })
 export class AuthModule {}

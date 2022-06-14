@@ -6,8 +6,8 @@ import { LoggedDaysController } from './logged.day.controller';
 import { LoggedDay } from '../../entities/logged.day.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([LoggedDay])],
-    controllers: [LoggedDaysController],
-    providers: [LoggedDaysService],
+  imports: [TypeOrmModule.forFeature([LoggedDay])],
+  controllers: [LoggedDaysController],
+  providers: [LoggedDaysService],
 })
 export class LoggedDaysModule {}

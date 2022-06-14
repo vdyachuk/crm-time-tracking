@@ -3,16 +3,16 @@ import { ProjectData } from '../modules/projects/model';
 
 @Entity()
 export class Project {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    public buildData(): ProjectData {
-        return {
-            id: this.id,
-            name: this.name,
-        };
-    }
+  public buildData(): ProjectData {
+    return {
+      id: this.id,
+      name: this.name,
+    };
+  }
 }
