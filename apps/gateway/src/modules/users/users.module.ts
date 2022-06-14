@@ -11,7 +11,7 @@ import { Profile } from '../../entities/profile.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Profile]),
+        TypeOrmModule.forFeature([User, Profile])
         // ClientsModule.register([
         //     {
         //         name: 'FILE_MICROSERVICE',
@@ -25,6 +25,6 @@ import { Profile } from '../../entities/profile.entity';
     ],
     controllers: [ProfileController],
     providers: [UserService, IsUserAlreadyExist],
-    exports: [UserService],
+    exports: [UserService]
 })
 export class UserModule {}

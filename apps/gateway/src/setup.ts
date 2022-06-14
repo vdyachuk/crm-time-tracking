@@ -12,8 +12,8 @@ export function setup(app: INestApplication): INestApplication {
         new ValidationPipe({
             transform: true,
             whitelist: true,
-            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        })
     );
 
     app.use(cookieParser(process.env.APP_SECRET));
@@ -23,17 +23,14 @@ export function setup(app: INestApplication): INestApplication {
             secret: process.env.APP_SECRET as string,
             resave: false,
             saveUninitialized: false,
-            store:
-                process.env.NODE_ENV === 'production'
-                    ? new (connectPgSimple(session))()
-                    : new session.MemoryStore(),
+            store: process.env.NODE_ENV === 'production' ? new (connectPgSimple(session))() : new session.MemoryStore(),
             cookie: {
                 httpOnly: true,
                 signed: true,
                 sameSite: 'strict',
-                secure: process.env.NODE_ENV === 'production',
-            },
-        }),
+                secure: process.env.NODE_ENV === 'production'
+            }
+        })
     );
 
     app.use(passport.initialize());
@@ -42,7 +39,7 @@ export function setup(app: INestApplication): INestApplication {
     app.enableCors({
         origin: process.env.ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',
         credentials: true,
-        exposedHeaders: ['Authorization'],
+        exposedHeaders: ['Authorization']
     });
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
