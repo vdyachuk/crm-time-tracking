@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { LoggedDayData } from '.';
+import { LoggedDayData } from './index';
 
 @Entity({ name: 'loggedday' })
 export class LoggedDay {

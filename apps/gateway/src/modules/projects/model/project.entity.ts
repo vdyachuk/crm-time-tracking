@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ProjectData } from '.';
+import { ProjectData } from './index';
 
 @Entity({ name: 'projects' })
 export class Project {
