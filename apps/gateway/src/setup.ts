@@ -1,4 +1,4 @@
-import { ValidationPipe, HttpStatus, INestApplication } from '@nestjs/common';
+import { alidationPipe, HttpStatus, INestApplication } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
