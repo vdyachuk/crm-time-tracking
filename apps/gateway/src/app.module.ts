@@ -14,9 +14,9 @@ import { configService } from './config/config.service';
         UserModule,
         TerminusModule,
         ProjectsModule,
-        AuthModule
+        AuthModule,
     ],
     controllers: [HealthController],
-    providers: []
+    providers: [],
 })
 export class AppModule {}
