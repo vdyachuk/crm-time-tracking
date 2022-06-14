@@ -10,7 +10,7 @@ import { Project } from '../../entities/project.entity';
 export class ProjectsService {
     constructor(
         @InjectRepository(Project)
-        private projectsRepository: Repository<Project>
+        private projectsRepository: Repository<Project>,
     ) {}
 
     async getAll(): Promise<Project[]> {
@@ -40,7 +40,7 @@ export class ProjectsService {
     private buildProjectRO(project: Project) {
         const projectRO = {
             id: project.id,
-            name: project.name
+            name: project.name,
         };
 
         return { project: projectRO };

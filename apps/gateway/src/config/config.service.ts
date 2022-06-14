@@ -44,7 +44,7 @@ class ConfigService {
 
             migrations: ['src/migration/*.ts'],
 
-            ssl: this.isProduction()
+            ssl: this.isProduction(),
         };
     }
 }
@@ -55,7 +55,7 @@ const configService = new ConfigService(process.env).ensureValues([
     'DB_PORT',
     'DB_USER',
     'DB_PASSWORD',
-    'DB_NAME'
+    'DB_NAME',
 ]);
 
 export { configService };

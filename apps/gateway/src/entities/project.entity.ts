@@ -12,7 +12,7 @@ export class Project {
     public buildData(): ProjectData {
         return {
             id: this.id,
-            name: this.name
+            name: this.name,
         };
     }
 }

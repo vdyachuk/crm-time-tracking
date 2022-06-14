@@ -7,7 +7,7 @@ import {
     Param,
     ParseIntPipe,
     Put,
-    Body
+    Body,
 } from '@nestjs/common';
 
 import { UserService } from '../users.service';
@@ -28,7 +28,10 @@ export class ProfileController {
     }
 
     @Put(':id')
-    update(@Param('id', new ParseIntPipe()) id: number, @Body() updatesUser: UserUpdate): Promise<User> {
+    update(
+        @Param('id', new ParseIntPipe()) id: number,
+        @Body() updatesUser: UserUpdate,
+    ): Promise<User> {
         return this.userService.update(id, updatesUser);
     }
 }

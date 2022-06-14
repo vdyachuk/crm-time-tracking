@@ -6,6 +6,6 @@ import { AccountService } from './account.service';
 @Module({
     imports: [HttpModule],
     providers: [AccountService],
-    exports: [AccountService]
+    exports: [AccountService],
 })
 export class AccountModule {}

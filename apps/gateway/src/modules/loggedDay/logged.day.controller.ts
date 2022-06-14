@@ -27,7 +27,10 @@ export class LoggedDaysController {
 
     @Put(':id')
     @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
-    async update(@Param('id') loggedDayId: number, @Body('loggedDay') loggedDayData: UpdateLoggedDayDto) {
+    async update(
+        @Param('id') loggedDayId: number,
+        @Body('loggedDay') loggedDayData: UpdateLoggedDayDto,
+    ) {
         return await this.loggedDaysService.update(loggedDayId, loggedDayData);
     }
     @Delete(':id')

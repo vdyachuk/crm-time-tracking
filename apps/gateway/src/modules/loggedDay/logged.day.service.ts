@@ -10,7 +10,7 @@ import { LoggedDay } from '../../entities/logged.day.entity';
 export class LoggedDaysService {
     constructor(
         @InjectRepository(LoggedDay)
-        private loggedDaysRepository: Repository<LoggedDay>
+        private loggedDaysRepository: Repository<LoggedDay>,
     ) {}
 
     async getAll(): Promise<LoggedDay[]> {
@@ -39,7 +39,7 @@ export class LoggedDaysService {
     private buildLoggedDayRO(loggedDay: LoggedDay) {
         const loggedDayRO = {
             id: loggedDay.id,
-            dayData: loggedDay.dayData
+            dayData: loggedDay.dayData,
         };
 
         return { loggedDay: loggedDayRO };

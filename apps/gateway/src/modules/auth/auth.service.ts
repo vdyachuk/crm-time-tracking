@@ -8,7 +8,10 @@ import { UserService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService,
+    ) {}
 
     async register(dto: SignUp): Promise<User> {
         const user = await this.userService.create(dto);
@@ -49,7 +52,7 @@ export class AuthService {
 
     signToken(user: User): string {
         const payload = {
-            sub: user.email
+            sub: user.email,
         };
 
         return this.jwtService.sign(payload);

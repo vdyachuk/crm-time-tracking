@@ -11,7 +11,7 @@ import { User } from '../../entities/user.entity';
 export class IsUserAlreadyExist implements ValidatorConstraintInterface {
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async validate(email: string): Promise<boolean> {

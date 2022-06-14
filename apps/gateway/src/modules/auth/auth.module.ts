@@ -18,14 +18,14 @@ import { LocalStrategy } from 'src/config/local.strategy.configuration';
             secret: process.env.APP_SECRET,
             signOptions: {
                 expiresIn: '1d',
-                algorithm: 'HS384'
+                algorithm: 'HS384',
             },
             verifyOptions: {
-                algorithms: ['HS384']
-            }
-        })
+                algorithms: ['HS384'],
+            },
+        }),
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer]
+    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
 })
 export class AuthModule {}

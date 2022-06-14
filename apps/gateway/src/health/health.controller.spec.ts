@@ -4,7 +4,7 @@ import {
     HealthIndicatorFunction,
     MemoryHealthIndicator,
     TerminusModule,
-    TypeOrmHealthIndicator
+    TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -26,13 +26,13 @@ describe('HealthController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [HealthController],
-            imports: [TerminusModule]
+            imports: [TerminusModule],
         })
             .overrideProvider(HealthCheckService)
             .useValue({
                 check(indicators: HealthIndicatorFunction[]) {
                     return Promise.resolve(indicators.map((indicator) => indicator()));
-                }
+                },
             })
             .overrideProvider(TypeOrmHealthIndicator)
             .useClass(MockHealthIndicator)

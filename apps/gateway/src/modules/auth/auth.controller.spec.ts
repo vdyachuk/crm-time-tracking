@@ -17,9 +17,9 @@ const userBuilder = build<Partial<User>>({
         name: perBuild(() => faker.name.findName()),
         email: perBuild(() => faker.internet.exampleEmail()),
         createdAt: perBuild(() => new Date()),
-        updatedAt: perBuild(() => new Date())
+        updatedAt: perBuild(() => new Date()),
     },
-    postBuild: (u) => new User(u)
+    postBuild: (u) => new User(u),
 });
 
 describe('Auth Controller', () => {
@@ -34,10 +34,10 @@ describe('Auth Controller', () => {
                 UserService,
                 {
                     provide: getRepositoryToken(User),
-                    useValue: repositoryMock
-                }
+                    useValue: repositoryMock,
+                },
             ],
-            imports: [JwtModule.register({ secret: process.env.APP_SECRET })]
+            imports: [JwtModule.register({ secret: process.env.APP_SECRET })],
         }).compile();
 
         controller = module.get<AuthController>(AuthController);
@@ -51,7 +51,7 @@ describe('Auth Controller', () => {
         const register = {
             name: 'John Doe',
             email: 'john@doe.me',
-            password: 'Pa$$w0rd'
+            password: 'Pa$$w0rd',
         };
         repositoryMock.save.mockResolvedValueOnce(userBuilder({ overrides: register }) as User);
 
@@ -62,8 +62,8 @@ describe('Auth Controller', () => {
         const user = userBuilder({
             overrides: {
                 name: 'John Doe',
-                email: 'john@doe.me'
-            }
+                email: 'john@doe.me',
+            },
         });
 
         await expect(controller.login(user as User)).resolves.not.toHaveProperty('password');
@@ -73,8 +73,8 @@ describe('Auth Controller', () => {
         const user = userBuilder({
             overrides: {
                 name: 'John Doe',
-                email: 'john@doe.me'
-            }
+                email: 'john@doe.me',
+            },
         });
 
         expect(controller.me(user as User)).toEqual(user);

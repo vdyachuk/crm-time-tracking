@@ -9,10 +9,12 @@ export class AccountService {
     getCurrentUser(accessToken: string) {
         const headersRequest = {
             'Content-Type': 'application/json',
-            Authorization: accessToken
+            Authorization: accessToken,
         };
 
-        const axiosResponse = this.httpService.get(process.env.SERVER_URL + '/account', { headers: headersRequest });
+        const axiosResponse = this.httpService.get(process.env.SERVER_URL + '/account', {
+            headers: headersRequest,
+        });
         const user = lastValueFrom(axiosResponse.pipe(map((response) => response.data.user)));
 
         return user;

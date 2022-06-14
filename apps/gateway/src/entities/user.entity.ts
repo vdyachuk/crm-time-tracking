@@ -1,6 +1,12 @@
 import * as crypto from 'crypto';
 import { Exclude } from 'class-transformer';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {

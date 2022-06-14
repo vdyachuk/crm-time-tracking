@@ -16,14 +16,14 @@ const userBuilder = build<Partial<User>>({
         email: perBuild(() => faker.internet.exampleEmail()),
         password: perBuild(() => faker.datatype.uuid()),
         createdAt: perBuild(() => new Date()),
-        updatedAt: perBuild(() => new Date())
+        updatedAt: perBuild(() => new Date()),
     },
-    postBuild: (u) => new User(u)
+    postBuild: (u) => new User(u),
 });
 const updateBuilder = build({
     fields: {
-        name: perBuild(() => faker.name.findName())
-    }
+        name: perBuild(() => faker.name.findName()),
+    },
 });
 
 describe('Profile Controller', () => {
@@ -32,7 +32,7 @@ describe('Profile Controller', () => {
 
     beforeEach(async () => {
         repositoryMock.save.mockImplementation((entity: any) =>
-            Promise.resolve(userBuilder({ overrides: entity }) as User)
+            Promise.resolve(userBuilder({ overrides: entity }) as User),
         );
         const module: TestingModule = await Test.createTestingModule({
             controllers: [ProfileController],
@@ -40,9 +40,9 @@ describe('Profile Controller', () => {
                 UserService,
                 {
                     provide: getRepositoryToken(User),
-                    useValue: repositoryMock
-                }
-            ]
+                    useValue: repositoryMock,
+                },
+            ],
         }).compile();
 
         controller = module.get<ProfileController>(ProfileController);
