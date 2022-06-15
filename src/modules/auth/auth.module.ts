@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { SessionSerializer } from './session.serializer';
 
 import { JwtStrategy } from '../../config/jwt.strategy.configuration';
-import { LocalStrategy } from 'src/config/local.strategy.configuration';
+import { LocalStrategy } from '../../config/local.strategy.configuration';
 
 @Module({
   imports: [
