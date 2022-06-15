@@ -10,11 +10,11 @@ import {
   Body,
 } from '@nestjs/common';
 
-import { UserService } from '../users.service';
-import { UserUpdate } from '../dto/user-update.dto';
-import { JWTAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { SessionAuthGuard } from '../../auth/guards/session-auth.guard';
-import { User } from '../../../entities/user.entity';
+import { UserService } from '@users/users.service';
+import { UserUpdate } from '@users/dto/user-update.dto';
+import { JWTAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '@auth/guards/session-auth.guard';
+import { User } from '@entities/user.entity';
 
 @Controller('profile')
 @UseGuards(JWTAuthGuard, SessionAuthGuard)

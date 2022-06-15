@@ -6,8 +6,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { mock } from 'jest-mock-extended';
 import { Repository } from 'typeorm';
 
-import { User } from '../../entities/user.entity';
-import { UserService } from '../users/users.service';
+import { User } from '@entities/user.entity';
+import { UserService } from '@users/users.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
