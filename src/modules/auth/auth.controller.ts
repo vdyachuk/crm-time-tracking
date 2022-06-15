@@ -9,6 +9,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { TokenInterceptor } from '@interseptors/token.interceptor';
 import { SignInDto } from './dto/sign-in.dto';
+import { UserInfo } from '@users/dto/response-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   // @UseInterceptors(TokenInterceptor)
-  register(@Body() signUpDto: SignUpDto): Promise<User> {
+  register(@Body() signUpDto: SignUpDto): Promise<UserInfo> {
     return this.authService.register(signUpDto);
   }
 
@@ -25,7 +26,7 @@ export class AuthController {
   // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   // @UseInterceptors(TokenInterceptor)
-  async login(@Body() signInDto: SignInDto): Promise<User> {
+  async login(@Body() signInDto: SignInDto): Promise<UserInfo> {
     return this.authService.login(signInDto);
   }
 

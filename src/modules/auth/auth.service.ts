@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as util from 'util';
 import * as crypto from 'crypto';
 
 import { User } from '@entities/user.entity';
@@ -7,23 +8,27 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { JwtPayload } from '../../interface/jwt-payload.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
+import { UserInfo } from '@users/dto/response-user.dto';
+
+const encryptIterations = 50000;
+const encryptKeylen = 64;
+const encryptDigest = 'sha512';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-  async register(dto: SignUpDto): Promise<User> {
+  async register(dto: SignUpDto): Promise<UserInfo> {
     const encryptedPassword = await this.encryptPassword(dto.password);
 
     dto.password = encryptedPassword;
 
     const user = await this.userService.create(dto);
-    delete user.password;
 
-    return user;
+    return UserInfo.mapFrom(user);
   }
 
-  async login(dto: SignInDto): Promise<User> {
+  async login(dto: SignInDto): Promise<UserInfo> {
     const user: User = await this.userService.findOne({ where: { email: dto.email } });
     if (!user) {
       throw new UnauthorizedException('Incorrect password or email');
@@ -32,9 +37,8 @@ export class AuthService {
     if (!(await this.checkPassword(dto.password, user.password))) {
       throw new UnauthorizedException('Incorrect password or email');
     }
-    delete user.password;
 
-    return user;
+    return UserInfo.mapFrom(user);
   }
 
   async verifyPayload(payload: JwtPayload): Promise<User> {
@@ -59,37 +63,21 @@ export class AuthService {
   }
 
   private async encryptPassword(plainPassword: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const iterations = 50000;
-      const keylen = 64;
-      const digest = 'sha512';
-      const salt = crypto.randomBytes(16).toString('hex');
+    const salt = crypto.randomBytes(16).toString('hex');
 
-      crypto.pbkdf2(plainPassword, salt, iterations, keylen, digest, (err, derivedKey) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(salt + ':' + derivedKey.toString('hex'));
-        }
-      });
-    });
+    const crypt = util.promisify(crypto.pbkdf2);
+
+    const encryptedPassword = await crypt(plainPassword, salt, encryptIterations, encryptKeylen, encryptDigest);
+
+    return salt + ':' + encryptedPassword.toString('hex');
   }
 
-  private async checkPassword(password: string, encryptedPassword: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const [salt, key] = encryptedPassword.split(':');
+  private async checkPassword(password: string, existPassword: string): Promise<boolean> {
+    const [salt, key] = existPassword.split(':');
 
-      const iterations = 50000;
-      const keylen = 64;
-      const digest = 'sha512';
+    const crypt = util.promisify(crypto.pbkdf2);
 
-      crypto.pbkdf2(password, salt, iterations, keylen, digest, (err, derivedKey) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(key === derivedKey.toString('hex'));
-        }
-      });
-    });
+    const encryptedPassword = await crypt(password, salt, encryptIterations, encryptKeylen, encryptDigest);
+    return key === encryptedPassword.toString('hex');
   }
 }

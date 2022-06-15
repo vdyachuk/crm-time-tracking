@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { Repository } from 'typeorm';
 
 import { User } from '@entities/user.entity';
@@ -16,10 +16,10 @@ export class IsUserAlreadyExist implements ValidatorConstraintInterface {
   async validate(email: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { email } });
 
-    return !!user;
+    return !user;
   }
 
-  defaultMessage(validationArguments?: ValidationArguments): string {
-    return `The email ${validationArguments.value} is already register.`;
+  defaultMessage(): string {
+    return 'Incorrect registration data.';
   }
 }

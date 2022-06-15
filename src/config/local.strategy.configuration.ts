@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 
 import { AuthService } from '@auth/auth.service';
-import { User } from '@entities/user.entity';
 import { SignInDto } from '@auth/dto/sign-in.dto';
+import { UserInfo } from '@users/dto/response-user.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     });
   }
 
-  validate(signInDto: SignInDto): Promise<User> {
+  validate(signInDto: SignInDto): Promise<UserInfo> {
     return this.authService.login(signInDto);
   }
 }
