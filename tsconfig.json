@@ -18,9 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "src/*": [
-        "src/*"
-      ]
+      "@entities/*": ["./src/entities/*"],
+      "@guards/*": ["./src/guards/*"],
+      "@interseptors/*": ["./src/interseptors/*"],
+      "@users/*": ["./src/modules/users/*"],
+      "@auth/*": ["./src/modules/auth/*"],
+      "@projects/*": ["./src/modules/projects/*"]
     }
   }
 }

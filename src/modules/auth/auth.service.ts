@@ -1,37 +1,44 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as util from 'util';
+import * as crypto from 'crypto';
 
-import { User } from '../../entities/user.entity';
-import { SignUp } from './dto/sign-up.dto';
+import { User } from '@entities/user.entity';
+import { SignUpDto } from './dto/sign-up.dto';
 import { JwtPayload } from '../../interface/jwt-payload.interface';
-import { UserService } from '../users/users.service';
+import { UserService } from '@users/users.service';
+import { SignInDto } from './dto/sign-in.dto';
+import { UserInfo } from '@users/dto/response-user.dto';
+
+const encryptIterations = 50000;
+const encryptKeylen = 64;
+const encryptDigest = 'sha512';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-  async register(dto: SignUp): Promise<User> {
-    const user = await this.userService.create(dto);
-    delete user.password;
+  async register(dto: SignUpDto): Promise<UserInfo> {
+    const encryptedPassword = await this.encryptPassword(dto.password);
 
-    return user;
+    dto.password = encryptedPassword;
+
+    const user = await this.userService.create(dto);
+
+    return UserInfo.mapFrom(user);
   }
 
-  async login(email: string, password: string, salt: string): Promise<User> {
-    let user: User;
-
-    try {
-      user = await this.userService.findOne({ where: { email } });
-    } catch (err) {
-      throw new UnauthorizedException(`Incorrect password or email: ${email}`);
+  async login(dto: SignInDto): Promise<UserInfo> {
+    const user: User = await this.userService.findOne({ where: { email: dto.email } });
+    if (!user) {
+      throw new UnauthorizedException('Incorrect password or email');
     }
 
-    if (!(await user.checkPassword(password, salt))) {
-      throw new UnauthorizedException(`Incorrect password or email: ${email}`);
+    if (!(await this.checkPassword(dto.password, user.password))) {
+      throw new UnauthorizedException('Incorrect password or email');
     }
-    delete user.password;
 
-    return user;
+    return UserInfo.mapFrom(user);
   }
 
   async verifyPayload(payload: JwtPayload): Promise<User> {
@@ -53,5 +60,24 @@ export class AuthService {
     };
 
     return this.jwtService.sign(payload);
+  }
+
+  private async encryptPassword(plainPassword: string): Promise<string> {
+    const salt = crypto.randomBytes(16).toString('hex');
+
+    const crypt = util.promisify(crypto.pbkdf2);
+
+    const encryptedPassword = await crypt(plainPassword, salt, encryptIterations, encryptKeylen, encryptDigest);
+
+    return salt + ':' + encryptedPassword.toString('hex');
+  }
+
+  private async checkPassword(password: string, existPassword: string): Promise<boolean> {
+    const [salt, key] = existPassword.split(':');
+
+    const crypt = util.promisify(crypto.pbkdf2);
+
+    const encryptedPassword = await crypt(password, salt, encryptIterations, encryptKeylen, encryptDigest);
+    return key === encryptedPassword.toString('hex');
   }
 }
