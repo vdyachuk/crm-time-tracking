@@ -11,21 +11,21 @@ import { LocalStrategy } from 'src/config/local.strategy.configuration';
 import { configService } from 'src/config/config.service';
 
 @Module({
-    imports: [
-        UserModule,
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.register({
-            secret: configService.getAppSecret(),
-            signOptions: {
-                expiresIn:  configService.getJwtExpired(),
-                algorithm: 'HS384'
-            },
-            verifyOptions: {
-                algorithms: ['HS384']
-            }
-        })
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer]
+  imports: [
+    UserModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: configService.getAppSecret(),
+      signOptions: {
+        expiresIn: configService.getJwtExpired(),
+        algorithm: 'HS384',
+      },
+      verifyOptions: {
+        algorithms: ['HS384'],
+      },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
 })
 export class AuthModule {}
