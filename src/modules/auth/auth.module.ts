@@ -9,23 +9,27 @@ import { SessionSerializer } from './session.serializer';
 import { JwtStrategy } from 'src/config/jwt.strategy.configuration';
 import { LocalStrategy } from 'src/config/local.strategy.configuration';
 import { configService } from 'src/config/config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RefreshStrategy } from '../../config/refresh.strategy';
+import { User } from '../../entities/user.entity';
 
 @Module({
-    imports: [
-        UserModule,
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.register({
-            secret: configService.getAppSecret(),
-            signOptions: {
-                expiresIn:  configService.getJwtExpired(),
-                algorithm: 'HS384'
-            },
-            verifyOptions: {
-                algorithms: ['HS384']
-            }
-        })
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer]
+  imports: [
+    UserModule,
+    TypeOrmModule.forFeature([User]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: configService.getAppSecret(),
+      signOptions: {
+        expiresIn: configService.getJwtExpired(),
+        algorithm: 'HS384',
+      },
+      verifyOptions: {
+        algorithms: ['HS384'],
+      },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer, RefreshStrategy],
 })
 export class AuthModule {}

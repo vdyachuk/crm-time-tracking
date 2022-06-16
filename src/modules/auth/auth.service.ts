@@ -1,7 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Req, Res, Get, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
+import { CurrentUser } from '../../interface/current.user';
+import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 import { User } from '@entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -28,8 +31,21 @@ export class AuthService {
     return UserInfo.mapFrom(user);
   }
 
-  async login(dto: SignInDto): Promise<UserInfo> {
+  async login(
+    dto: SignInDto,
+    @Req() req,
+    @Res({ passthrough: true })
+    res: Response,
+  ): Promise<UserInfo> {
     const user: User = await this.userService.findOne({ where: { email: dto.email } });
+    const token = await this.userService.getJwtToken(req.user as CurrentUser);
+    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const secretData = {
+      token,
+      refreshToken,
+    };
+
+    res.cookie('auth-cookie', secretData, { httpOnly: true });
     if (!user) {
       throw new UnauthorizedException('Incorrect password or email');
     }
@@ -79,5 +95,18 @@ export class AuthService {
 
     const encryptedPassword = await crypt(password, salt, encryptIterations, encryptKeylen, encryptDigest);
     return key === encryptedPassword.toString('hex');
+  }
+  @Get('refresh-tokens')
+  @UseGuards(AuthGuard('refresh'))
+  async regenerateTokens(@Req() req, @Res({ passthrough: true }) res: Response) {
+    const token = await this.userService.getJwtToken(req.user as CurrentUser);
+    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const secretData = {
+      token,
+      refreshToken,
+    };
+
+    res.cookie('auth-cookie', secretData, { httpOnly: true });
+    return { msg: 'success' };
   }
 }
