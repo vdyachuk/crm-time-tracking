@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUser } from '@users/users.decorator';
 import { User } from '@entities/user.entity';
@@ -12,14 +13,17 @@ import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
 
 @Controller('auth')
+@ApiTags('Authentication')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('registration')
   @HttpCode(HttpStatus.CREATED)
-  // @UseInterceptors(TokenInterceptor)
+  @ApiOkResponse({ type: UserInfo, description: 'Successfully created user' })
+  @ApiBadRequestResponse({ description: 'Incorrect registration data.' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   register(@Body() signUpDto: SignUpDto): Promise<UserInfo> {
-    return this.authService.register(signUpDto);
+    return this.authService.registration(signUpDto);
   }
 
   @Post('login')

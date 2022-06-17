@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
@@ -18,14 +18,18 @@ const encryptDigest = 'sha512';
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-  async register(dto: SignUpDto): Promise<UserInfo> {
+  async registration(dto: SignUpDto): Promise<UserInfo> {
     const encryptedPassword = await this.encryptPassword(dto.password);
 
     dto.password = encryptedPassword;
 
-    const user = await this.userService.create(dto);
+    try {
+      const user = await this.userService.create(dto);
 
-    return UserInfo.mapFrom(user);
+      return UserInfo.mapFrom(user);
+    } catch (_) {
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 
   async login(dto: SignInDto): Promise<UserInfo> {
