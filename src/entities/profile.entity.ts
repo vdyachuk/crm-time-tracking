@@ -1,23 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 
-import { User } from './user.entity';
+import { User } from '.';
 
-@Entity()
+@Entity('profiles')
 export class Profile {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Column()
-  phone: string;
+  @Column({
+    length: 255,
+  })
+  firstName: string;
 
-  @Column('date')
-  birthday: Date;
-
-  @Column()
-  website: string;
-
-  @Column()
-  occupation: string;
+  @Column({
+    length: 255,
+  })
+  lastName: string;
 
   @OneToOne(() => User)
   @JoinColumn()
