@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class LoggedDayInput {
   @ApiProperty()
-  public readonly dayData: string;
+  public readonly dayData: Date;
   @ApiProperty()
   public readonly time: string;
   @ApiProperty()
-  public readonly desctiption: string;
+  public readonly description: string;
   @ApiProperty()
   public readonly hours: string;
   @ApiProperty()

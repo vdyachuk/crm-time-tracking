@@ -12,24 +12,26 @@ export class LoggedDaysController {
 
   @Get()
   @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
-  public async getAll(): Promise<LoggedDayData[]> {
+  public async getAll(): Promise<null> {
     const loggedDay = await this.loggedDaysService.getAll();
 
-    return loggedDay.map((loggedDay) => loggedDay.buildData());
+    return null;
+    // loggedDay.map((loggedDay) => loggedDay.buildData());
   }
 
   @Post()
   @ApiResponse({ status: HttpStatus.CREATED, type: LoggedDayData })
-  async create(@Body(LoggedDayPipe) input: LoggedDayInput): Promise<LoggedDayData> {
+  async create(@Body(LoggedDayPipe) input: LoggedDayInput): Promise<null> {
     const loggedDay = await this.loggedDaysService.create(input);
-    return loggedDay.buildData();
+    return null;
   }
 
   @Put(':id')
   @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
-  async update(@Param('id') loggedDayId: number, @Body('loggedDay') loggedDayData: UpdateLoggedDayDto) {
+  async update(@Param('id') loggedDayId: string, @Body('loggedDay') loggedDayData: UpdateLoggedDayDto) {
     return await this.loggedDaysService.update(loggedDayId, loggedDayData);
   }
+
   @Delete(':id')
   @ApiResponse({ status: HttpStatus.OK, isArray: true, type: LoggedDayData })
   async delete(@Param() params) {

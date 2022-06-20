@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 import 'dotenv/config';
 
@@ -45,16 +46,27 @@ class ConfigService {
       username: this.getValue('DB_USER'),
       password: this.getValue('DB_PASSWORD'),
       database: this.getValue('DB_NAME'),
-
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-
-      migrationsTableName: 'migration',
-
-      migrations: ['src/migration/*.ts'],
-
       ssl: this.isProduction(),
     };
   }
+
+  public getDataSource = (): DataSource =>
+    new DataSource({
+      type: 'postgres',
+
+      host: this.getValue('DB_HOST'),
+      port: parseInt(this.getValue('DB_PORT')),
+      username: this.getValue('DB_USER'),
+      password: this.getValue('DB_PASSWORD'),
+      database: this.getValue('DB_NAME'),
+
+      entities: ['src/**/**.entity{.ts,.js}'],
+      migrations: ['src/migrations/**/*{.ts,.js}'],
+      subscribers: ['src/subscriber/**/*{.ts,.js}'],
+
+      logging: false,
+      synchronize: false,
+    });
 }
 
 const configService = new ConfigService(process.env).ensureValues([
