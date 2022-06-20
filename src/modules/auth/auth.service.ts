@@ -2,9 +2,10 @@ import { Injectable, UnauthorizedException, Req, Res, Get, UseGuards } from '@ne
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
-import { CurrentUser } from '../../interface/current.user';
+import { CurrentUser } from '../../interface/user.interface';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { Repository } from 'typeorm';
 
 import { User } from '@entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -12,6 +13,8 @@ import { JwtPayload } from '../../interface/jwt-payload.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { configService } from 'src/config/config.service';
 
 const encryptIterations = 50000;
 const encryptKeylen = 64;
@@ -19,7 +22,12 @@ const encryptDigest = 'sha512';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  constructor(
+    @InjectRepository(User)
+    private user: Repository<User>,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(dto: SignUpDto): Promise<UserInfo> {
     const encryptedPassword = await this.encryptPassword(dto.password);
@@ -31,15 +39,10 @@ export class AuthService {
     return UserInfo.mapFrom(user);
   }
 
-  async login(
-    dto: SignInDto,
-    @Req() req,
-    @Res({ passthrough: true })
-    res: Response,
-  ): Promise<UserInfo> {
+  async login(dto: SignInDto, @Req() req, @Res({ passthrough: true }) res): Promise<UserInfo> {
     const user: User = await this.userService.findOne({ where: { email: dto.email } });
-    const token = await this.userService.getJwtToken(req.user as CurrentUser);
-    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const token = await this.getJwtToken(req.user as CurrentUser);
+    const refreshToken = await this.getRefreshToken(req.user.id);
     const secretData = {
       token,
       refreshToken,
@@ -99,8 +102,8 @@ export class AuthService {
   @Get('refresh-tokens')
   @UseGuards(AuthGuard('refresh'))
   async regenerateTokens(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.userService.getJwtToken(req.user as CurrentUser);
-    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const token = await this.getJwtToken(req.user as CurrentUser);
+    const refreshToken = await this.getRefreshToken(req.user.id);
     const secretData = {
       token,
       refreshToken,
@@ -108,5 +111,19 @@ export class AuthService {
 
     res.cookie('auth-cookie', secretData, { httpOnly: true });
     return { msg: 'success' };
+  }
+  public async getRefreshToken(id: number): Promise<string> {
+    const userDataToUpdate = {
+      refreshToken: configService.getAppSecret(),
+    };
+
+    await this.user.update(id, userDataToUpdate);
+    return userDataToUpdate.refreshToken;
+  }
+  public async getJwtToken(user: CurrentUser): Promise<string> {
+    const payload = {
+      ...user,
+    };
+    return this.jwtService.signAsync(payload);
   }
 }

@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     });
   }
 
-  validate(signInDto: SignInDto, res: any, req: any): Promise<UserInfo> {
+  validate(signInDto: SignInDto, res: Response, req: Request): Promise<UserInfo> {
     return this.authService.login(signInDto, res, req);
   }
 }
