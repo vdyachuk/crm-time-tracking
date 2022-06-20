@@ -109,4 +109,18 @@ export class AuthService {
     res.cookie('auth-cookie', secretData, { httpOnly: true });
     return { msg: 'success' };
   }
+  public async getJwtToken(user: CurrentUser): Promise<string> {
+    const payload = {
+      ...user,
+    };
+    return this.jwtService.signAsync(payload);
+  }
+  public async getRefreshToken(id: number): Promise<string> {
+    const userDataToUpdate = {
+      refreshToken: process.env.JWT_REFRESH_TOKEN_SECRET,
+    };
+
+    await this.user.update(id, userDataToUpdate);
+    return userDataToUpdate.refreshToken;
+  }
 }

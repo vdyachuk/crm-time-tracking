@@ -33,7 +33,7 @@ export class User {
   })
   password: string;
 
-  @Column({ nullable: true, name: 'refreshtoken' })
+  @Column({ nullable: true, name: 'refreshToken' })
   refreshToken: string;
 
   @Column({
