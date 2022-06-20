@@ -16,8 +16,11 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column({ nullable: true, name: 'refreshToken' })
+  @Column({ nullable: true, name: 'refreshtoken' })
   refreshToken: string;
+
+  @Column({ type: 'date', nullable: true, name: 'refreshtokenexp' })
+  refreshTokenExp: string;
 
   @CreateDateColumn()
   createdAt: Date;
