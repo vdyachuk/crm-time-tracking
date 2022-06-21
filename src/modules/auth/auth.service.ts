@@ -1,10 +1,12 @@
-import { Injectable, UnauthorizedException, Req, Res, Get, UseGuards } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, Req, Res, Get, UseGuards } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
-import { CurrentUser } from '../../interface/current.user';
+import { IUser } from '../../interface/user.interface';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 import { User } from '@entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -19,7 +21,11 @@ const encryptDigest = 'sha512';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly user: Repository<User>,
+  ) {}
 
   async register(dto: SignUpDto): Promise<UserInfo> {
     const encryptedPassword = await this.encryptPassword(dto.password);
@@ -35,11 +41,11 @@ export class AuthService {
     dto: SignInDto,
     @Req() req,
     @Res({ passthrough: true })
-    res: Response,
+    res,
   ): Promise<UserInfo> {
     const user: User = await this.userService.findOne({ where: { email: dto.email } });
-    const token = await this.userService.getJwtToken(req.user as CurrentUser);
-    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const token = await this.getJwtToken(req.user as IUser);
+    const refreshToken = await this.getRefreshToken(req.user.id);
     const secretData = {
       token,
       refreshToken,
@@ -99,8 +105,8 @@ export class AuthService {
   @Get('refresh-tokens')
   @UseGuards(AuthGuard('refresh'))
   async regenerateTokens(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.userService.getJwtToken(req.user as CurrentUser);
-    const refreshToken = await this.userService.getRefreshToken(req.user.id);
+    const token = await this.getJwtToken(req.user as IUser);
+    const refreshToken = await this.getRefreshToken(req.user.id);
     const secretData = {
       token,
       refreshToken,
@@ -109,7 +115,7 @@ export class AuthService {
     res.cookie('auth-cookie', secretData, { httpOnly: true });
     return { msg: 'success' };
   }
-  public async getJwtToken(user: CurrentUser): Promise<string> {
+  public async getJwtToken(user: IUser): Promise<string> {
     const payload = {
       ...user,
     };
@@ -122,5 +128,39 @@ export class AuthService {
 
     await this.user.update(id, userDataToUpdate);
     return userDataToUpdate.refreshToken;
+  }
+  public async validateToken(req: Request, payload: any) {
+    if (!payload) {
+      throw new BadRequestException('Invalid jwt token');
+    }
+    const data = req?.cookies['Auth-cookie'];
+    if (!data?.refreshToken) {
+      throw new BadRequestException('Invalid refresh token');
+    }
+    const user = await this.validRefreshToken(payload.email, data.refreshToken);
+    if (!user) {
+      throw new BadRequestException('Token expired');
+    }
+
+    return user;
+  }
+  public async validRefreshToken(email: string, refreshToken: string): Promise<IUser> {
+    const user = await this.user.findOne({
+      where: {
+        email: email,
+        refreshToken: refreshToken,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const currentUser = new IUser();
+    currentUser.id = user.id;
+    currentUser.name = user.name;
+    currentUser.email = user.email;
+
+    return currentUser;
   }
 }

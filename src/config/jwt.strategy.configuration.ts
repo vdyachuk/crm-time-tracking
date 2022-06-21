@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { Request } from 'express';
 import { configService } from 'src/config/config.service';
+import { CookieEnums } from 'src/common/enums/cookies';
 
 import { AuthService } from '@auth/auth.service';
 import { User } from '@entities/user.entity';
@@ -14,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken([
         (request: Request) => {
-          const data = request?.cookies['auth-cookie'];
+          const data = request?.cookies[CookieEnums.Refresh];
           if (!data) {
             return null;
           }

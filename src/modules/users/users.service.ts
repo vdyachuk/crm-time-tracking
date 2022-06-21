@@ -1,19 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOneOptions } from 'typeorm';
-import { CurrentUser } from '../../interface/current.user';
+import { FindOneOptions } from 'typeorm';
 
 import { User } from '@entities/user.entity';
 import { UserUpdate } from './dto/user-update.dto';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository,
-    private user: Repository<User>,
-    private jwtService: JwtService,
   ) {}
 
   async create(data: Partial<User>): Promise<User> {
@@ -39,25 +35,5 @@ export class UserService {
     Object.assign(user, updates);
 
     return this.userRepository.save(user);
-  }
-
-  public async validRefreshToken(email: string, refreshToken: string): Promise<CurrentUser> {
-    const user = await this.user.findOne({
-      where: {
-        email: email,
-        refreshToken: refreshToken,
-      },
-    });
-
-    if (!user) {
-      return null;
-    }
-
-    const currentUser = new CurrentUser();
-    currentUser.id = user.id;
-    currentUser.name = user.name;
-    currentUser.email = user.email;
-
-    return currentUser;
   }
 }

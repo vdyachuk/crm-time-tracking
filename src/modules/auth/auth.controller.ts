@@ -24,8 +24,8 @@ export class AuthController {
   // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   // @UseInterceptors(TokenInterceptor)
-  async login(@Body() signInDto: SignInDto, res: any, req: any): Promise<UserInfo> {
-    return this.authService.login(signInDto, req, res);
+  async login(@Body() signInDto: SignInDto, res: Response, req: Request): Promise<UserInfo> {
+    return this.authService.login(signInDto, res, req);
   }
 
   @Get('/me')

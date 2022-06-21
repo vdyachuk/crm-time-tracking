@@ -10,7 +10,6 @@ import { JwtStrategy } from 'src/config/jwt.strategy.configuration';
 import { LocalStrategy } from 'src/config/local.strategy.configuration';
 import { configService } from 'src/config/config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshStrategy } from 'src/config/refresh.strategy';
 import { User } from 'src/entities/user.entity';
 
 @Module({
@@ -30,6 +29,6 @@ import { User } from 'src/entities/user.entity';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer, RefreshStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
 })
 export class AuthModule {}
