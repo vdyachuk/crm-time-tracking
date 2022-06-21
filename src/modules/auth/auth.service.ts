@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
@@ -23,13 +23,9 @@ export class AuthService {
 
     dto.password = encryptedPassword;
 
-    try {
-      const user = await this.userService.create(dto);
+    const user = await this.userService.create(dto);
 
-      return UserInfo.mapFrom(user);
-    } catch (_) {
-      throw new InternalServerErrorException('Internal server error');
-    }
+    return UserInfo.mapFrom(user);
   }
 
   async login(dto: SignInDto): Promise<UserInfo> {
