@@ -37,21 +37,9 @@ export class AuthService {
     return UserInfo.mapFrom(user);
   }
 
-  async login(
-    dto: SignInDto,
-    @Req() req,
-    @Res({ passthrough: true })
-    res,
-  ): Promise<UserInfo> {
+  async login(dto: SignInDto): Promise<UserInfo> {
     const user: User = await this.userService.findOne({ where: { email: dto.email } });
-    const token = await this.getJwtToken(req.user as IUser);
-    const refreshToken = await this.getRefreshToken(req.user.id);
-    const secretData = {
-      token,
-      refreshToken,
-    };
 
-    res.cookie('auth-cookie', secretData, { httpOnly: true });
     if (!user) {
       throw new UnauthorizedException('Incorrect password or email');
     }
@@ -105,7 +93,7 @@ export class AuthService {
   @Get('refresh-tokens')
   @UseGuards(AuthGuard('refresh'))
   async regenerateTokens(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.getJwtToken(req.user as IUser);
+    const token = await this.getJwtToken(req.user as User);
     const refreshToken = await this.getRefreshToken(req.user.id);
     const secretData = {
       token,
@@ -115,7 +103,7 @@ export class AuthService {
     res.cookie('auth-cookie', secretData, { httpOnly: true });
     return { msg: 'success' };
   }
-  public async getJwtToken(user: IUser): Promise<string> {
+  public async getJwtToken(user: User): Promise<string> {
     const payload = {
       ...user,
     };

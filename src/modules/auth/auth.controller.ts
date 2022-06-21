@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 
 import { AuthUser } from '@users/users.decorator';
 import { User } from '@entities/user.entity';
@@ -8,6 +8,8 @@ import { JWTAuthGuard } from './guards/jwt-auth.guard';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
+import { TokenInterceptor } from 'src/interseptors/token.interceptor';
+import { JwtInterceptor } from 'src/interseptors/jwt.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +17,7 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  // @UseInterceptors(TokenInterceptor)
+  @UseInterceptors(TokenInterceptor)
   register(@Body() signUpDto: SignUpDto): Promise<UserInfo> {
     return this.authService.register(signUpDto);
   }
@@ -23,9 +25,9 @@ export class AuthController {
   @Post('login')
   // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  // @UseInterceptors(TokenInterceptor)
-  async login(@Body() signInDto: SignInDto, res: Response, req: Request): Promise<UserInfo> {
-    return this.authService.login(signInDto, res, req);
+  @UseInterceptors(TokenInterceptor, JwtInterceptor)
+  async login(@Body() signInDto: SignInDto): Promise<UserInfo> {
+    return this.authService.login(signInDto);
   }
 
   @Get('/me')
