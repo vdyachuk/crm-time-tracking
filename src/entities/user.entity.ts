@@ -38,6 +38,7 @@ export class User {
 
   @Column({
     type: 'decimal',
+    nullable: true,
   })
   salary: number;
 
@@ -69,7 +70,7 @@ export class User {
   @JoinColumn()
   department: Department;
 
-  @OneToOne(() => Profile)
+  @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
 
   @OneToMany(() => Rate, (rate) => rate.user)

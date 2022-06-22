@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, plainToClass } from 'class-transformer';
+import { Expose, plainToClass, Type } from 'class-transformer';
 
 import { User } from '@entities/user.entity';
+import { Profile } from '@entities/profile.entity';
 
 export class UserInfo {
   @ApiProperty()
@@ -12,11 +13,15 @@ export class UserInfo {
   @Expose()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Profile })
   @Expose()
-  name: string;
+  @Type(() => Profile)
+  profile: Profile;
 
-  public static mapFrom(user: User): UserInfo {
-    return plainToClass(UserInfo, user, { excludeExtraneousValues: true });
+  public static mapFrom(data: User): UserInfo {
+    const { profile } = data;
+    const user = plainToClass(UserInfo, data, { excludeExtraneousValues: true });
+
+    return { ...user, profile };
   }
 }

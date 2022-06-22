@@ -20,4 +20,8 @@ export class Profile {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  constructor(data: Partial<Profile> = {}) {
+    Object.assign(this, data);
+  }
 }

@@ -8,7 +8,12 @@ export class SignUpDto {
   @ApiProperty()
   @IsDefined()
   @IsNotEmpty()
-  readonly name: string;
+  readonly firstName: string;
+
+  @ApiProperty()
+  @IsDefined()
+  @IsNotEmpty()
+  readonly lastName: string;
 
   @ApiProperty()
   @IsDefined()
