@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 
 import { LoggedDayInput } from '../model';
-import { JoiValidationPipe } from '../../../common/flow';
+import { JoiValidationPipe } from '../../../shared/pipe';
 
 export class LoggedDayPipe extends JoiValidationPipe {
   public buildSchema(): Joi.Schema {

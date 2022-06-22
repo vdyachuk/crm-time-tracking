@@ -2,15 +2,15 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, UseInterc
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUser } from '@users/users.decorator';
-import { User } from '@entities/user.entity';
+import { User } from '../../shared/entities/user.entity';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { JWTAuthGuard } from './guards/jwt-auth.guard';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
-import { TokenInterceptor } from 'src/interseptors/token.interceptor';
-import { JwtInterceptor } from 'src/interseptors/jwt.interceptor';
+import { TokenInterceptor } from 'src/shared/interseptors/token.interceptor';
+import { JwtInterceptor } from 'src/shared/interseptors/jwt.interceptor';
 
 @Controller('auth')
 @ApiTags('Authentication')

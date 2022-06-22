@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
-import { NotificationType, Notification, Role } from '.';
+import { NotificationType, Notification, Role } from './index';
 
 @Entity('roleNotificationTypes')
 export class RoleNotificationType {

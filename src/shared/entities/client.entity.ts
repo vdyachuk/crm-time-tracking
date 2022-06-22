@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Project, Department } from '.';
+import { Project, Department } from './index';
 
 @Entity('clients')
 export class Client {

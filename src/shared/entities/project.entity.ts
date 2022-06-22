@@ -11,11 +11,11 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { User, Client, Rate, LoggedDay, Department, Notification } from '.';
+import { User, Client, Rate, LoggedDay, Department, Notification } from './index';
 
-import { ProjectData } from 'src/modules/projects/model';
+import { ProjectData } from '@projects/model';
 
-import { ProjectTypeEnum, ProjectStatusEnum } from '../common/enums/project';
+import { ProjectTypeEnum, ProjectStatusEnum } from '../../common/enums/project';
 
 @Entity('projects')
 export class Project {

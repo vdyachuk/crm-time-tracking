@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from './common/flow/validation.pipe';
+import { ValidationPipe } from './shared/pipe/validation.pipe';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import helmet from 'fastify-helmet';
 import { contentParser } from 'fastify-multer';
 import { setup } from './setup';
-import { configService } from './config/config.service';
+import { configService } from './shared/config/config.service';
 import * as cookieParser from 'cookie-parser';
 
 const port = configService.getPort();

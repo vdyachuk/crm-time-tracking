@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LoggedDaysService } from './logged.day.service';
 import { LoggedDaysController } from './logged.day.controller';
-import { LoggedDay } from '@entities/loggedDay.entity';
+import { LoggedDay } from '../../shared/entities/loggedDay.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LoggedDay])],

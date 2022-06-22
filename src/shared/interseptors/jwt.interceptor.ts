@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { CookieEnums } from 'src/common/enums/cookies';
 import { Response } from 'express';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '@auth/auth.service';

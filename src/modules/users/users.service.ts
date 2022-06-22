@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions } from 'typeorm';
 
-import { User } from '@entities/user.entity';
+import { User } from '../../shared/entities/user.entity';
 import { UserUpdate } from './dto/user-update.dto';
-import { Profile } from '@entities/profile.entity';
+import { Profile } from '../../shared/entities/profile.entity';
 import { SignUpDto } from '@auth/dto/sign-up.dto';
 import { Repository } from 'typeorm';
 

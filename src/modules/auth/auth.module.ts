@@ -6,11 +6,12 @@ import { UserModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SessionSerializer } from './session.serializer';
-import { JwtStrategy } from 'src/config/jwt.strategy.configuration';
-import { LocalStrategy } from 'src/config/local.strategy.configuration';
-import { configService } from 'src/config/config.service';
+import { JwtStrategy } from 'src/shared/config/jwt.strategy.configuration';
+import { LocalStrategy } from 'src/shared/config/local.strategy.configuration';
+import { configService } from 'src/shared/config/config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/shared/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { User } from 'src/entities/user.entity';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, SessionSerializer],
+  providers: [AuthService, ConfigService, LocalStrategy, JwtStrategy, SessionSerializer],
 })
 export class AuthModule {}

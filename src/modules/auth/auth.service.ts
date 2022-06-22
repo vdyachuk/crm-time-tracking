@@ -3,17 +3,18 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
-import { IUser } from '../../interface/user.interface';
+import { IUser } from '../../common/interface/user.interface';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
-import { User } from '@entities/user.entity';
+import { User } from '../../shared/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { JwtPayload } from '../../interface/jwt-payload.interface';
+import { JwtPayload } from '../../common/interface/jwt-payload.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 const encryptIterations = 50000;
 const encryptKeylen = 64;
@@ -24,6 +25,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    @InjectRepository(User)
     private readonly user: Repository<User>,
   ) {}
 
@@ -90,6 +92,7 @@ export class AuthService {
     const encryptedPassword = await crypt(password, salt, encryptIterations, encryptKeylen, encryptDigest);
     return key === encryptedPassword.toString('hex');
   }
+
   @Get('refresh-tokens')
   @UseGuards(AuthGuard('refresh'))
   async regenerateTokens(@Req() req, @Res({ passthrough: true }) res: Response) {
@@ -103,12 +106,14 @@ export class AuthService {
     res.cookie('auth-cookie', secretData, { httpOnly: true });
     return { msg: 'success' };
   }
+
   public async getJwtToken(user: User): Promise<string> {
     const payload = {
       ...user,
     };
     return this.jwtService.signAsync(payload);
   }
+
   public async getRefreshToken(id: number): Promise<string> {
     const userDataToUpdate = {
       refreshToken: process.env.JWT_REFRESH_TOKEN_SECRET,
@@ -117,6 +122,7 @@ export class AuthService {
     await this.user.update(id, userDataToUpdate);
     return userDataToUpdate.refreshToken;
   }
+
   public async validateToken(req: Request, payload: any) {
     if (!payload) {
       throw new BadRequestException('Invalid jwt token');
@@ -132,6 +138,7 @@ export class AuthService {
 
     return user;
   }
+
   public async validRefreshToken(email: string, refreshToken: string): Promise<IUser | null> {
     const user = await this.user.findOne({
       where: {
@@ -146,7 +153,7 @@ export class AuthService {
 
     const currentUser = new IUser();
     currentUser.id = user.id;
-    currentUser.name = user.name;
+    // currentUser.name = user.name;
     currentUser.email = user.email;
 
     return currentUser;

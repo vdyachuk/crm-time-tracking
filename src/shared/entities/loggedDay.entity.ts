@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-import { User } from '.';
+import { User } from './index';
 import { Project } from './project.entity';
 
 @Entity('loggedDays')

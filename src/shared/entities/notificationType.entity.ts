@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { RoleNotificationType } from '.';
+import { RoleNotificationType } from './index';
 
-@Entity('roles')
-export class Role {
+@Entity('notificationTypes')
+export class NotificationType {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -12,6 +12,6 @@ export class Role {
   })
   name: string;
 
-  @OneToMany(() => RoleNotificationType, (roleNotificationType) => roleNotificationType.role)
+  @OneToMany(() => RoleNotificationType, (roleNotificationType) => roleNotificationType.notificationType)
   roleNotificationTypes: RoleNotificationType[];
 }

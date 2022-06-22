@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
-import { User, Project, RoleNotificationType } from '.';
+import { User, Project, RoleNotificationType } from './index';
 
 @Entity('notifications')
 export class Notification {

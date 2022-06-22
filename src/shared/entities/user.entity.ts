@@ -11,9 +11,9 @@ import {
   ManyToMany,
 } from 'typeorm';
 
-import { Department, Rate, LoggedDay, Project, Role, Profile, Notification } from '.';
+import { Department, Rate, LoggedDay, Project, Role, Profile, Notification } from './index';
 
-import { UserStatusEnum, UserProviderEnum } from '../common/enums/user';
+import { UserStatusEnum, UserProviderEnum } from '../../common/enums/user';
 
 @Entity('users')
 export class User {

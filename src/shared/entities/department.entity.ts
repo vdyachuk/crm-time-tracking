@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
-import { User, Project, Client } from '.';
+import { User, Project, Client } from './index';
 
 @Entity('departments')
 export class Department {
