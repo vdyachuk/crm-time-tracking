@@ -6,6 +6,7 @@ import { User } from '@entities/user.entity';
 import { UserUpdate } from './dto/user-update.dto';
 import { Profile } from '@entities/profile.entity';
 import { SignUpDto } from '@auth/dto/sign-up.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {

@@ -13,15 +13,7 @@ import { JwtPayload } from '../interface/jwt-payload.interface';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken([
-        (request: Request) => {
-          const data = request?.cookies[CookieEnums.Refresh];
-          if (!data) {
-            return null;
-          }
-          return data.token ?? null;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.getAppSecret(),
       ignoreExpiration: false,
       passReqToCallback: false,

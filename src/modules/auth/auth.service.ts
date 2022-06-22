@@ -132,7 +132,7 @@ export class AuthService {
 
     return user;
   }
-  public async validRefreshToken(email: string, refreshToken: string): Promise<IUser> {
+  public async validRefreshToken(email: string, refreshToken: string): Promise<IUser | null> {
     const user = await this.user.findOne({
       where: {
         email: email,
@@ -141,7 +141,7 @@ export class AuthService {
     });
 
     if (!user) {
-      return null;
+      throw new BadRequestException('Token expired');
     }
 
     const currentUser = new IUser();
