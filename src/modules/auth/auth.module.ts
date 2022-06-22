@@ -9,10 +9,13 @@ import { SessionSerializer } from './session.serializer';
 import { JwtStrategy } from 'src/config/jwt.strategy.configuration';
 import { LocalStrategy } from 'src/config/local.strategy.configuration';
 import { configService } from 'src/config/config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
 
 @Module({
   imports: [
     UserModule,
+    TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: configService.getAppSecret(),

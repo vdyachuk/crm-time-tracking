@@ -7,11 +7,13 @@ import helmet from 'fastify-helmet';
 import { contentParser } from 'fastify-multer';
 import { setup } from './setup';
 import { configService } from './config/config.service';
+import * as cookieParser from 'cookie-parser';
 
 const port = configService.getPort();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+  app.use(cookieParser());
   setup(app);
   app.register(helmet, {
     contentSecurityPolicy: {

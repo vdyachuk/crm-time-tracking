@@ -4,7 +4,12 @@ module.exports = {
     node: true,
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: ['plugin:@typescript-eslint/eslint-recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: [
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+  ],
   overrides: [
     {
       files: ['**/*.ts'],
@@ -12,6 +17,7 @@ module.exports = {
       parserOptions: {
         project: 'tsconfig.json',
         sourceType: 'module',
+        tsconfigRootDir: __dirname,
       },
       rules: {
         '@typescript-eslint/interface-name-prefix': 'off',

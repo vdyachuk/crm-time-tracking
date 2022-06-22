@@ -33,6 +33,9 @@ export class User {
   })
   password: string;
 
+  @Column({ nullable: true, name: 'refreshToken' })
+  refreshToken: string;
+
   @Column({
     type: 'decimal',
     nullable: true,
