@@ -47,6 +47,7 @@ class ConfigService {
       password: this.getValue('DB_PASSWORD'),
       database: this.getValue('DB_NAME'),
       ssl: this.isProduction(),
+      entities: [__dirname + '/../**/*.entity.{js,ts}'],
     };
   }
 

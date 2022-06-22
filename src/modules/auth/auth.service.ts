@@ -27,7 +27,7 @@ export class AuthService {
     private readonly user: Repository<User>,
   ) {}
 
-  async register(dto: SignUpDto): Promise<UserInfo> {
+  async registration(dto: SignUpDto): Promise<UserInfo> {
     const encryptedPassword = await this.encryptPassword(dto.password);
 
     dto.password = encryptedPassword;
