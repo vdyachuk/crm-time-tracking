@@ -4,16 +4,38 @@ import { Repository, FindOneOptions } from 'typeorm';
 
 import { User } from '@entities/user.entity';
 import { UserUpdate } from './dto/user-update.dto';
+import { Profile } from '@entities/profile.entity';
+import { SignUpDto } from '@auth/dto/sign-up.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
   ) {}
 
-  async create(data: Partial<User>): Promise<User> {
-    return this.userRepository.save(new User(data));
+  async create(data: SignUpDto): Promise<User> {
+    const user = new User(data);
+
+    await this.userRepository.save(user);
+
+    const userProfile = new Profile({
+      ...data,
+      user,
+    });
+
+    await this.profileRepository.save(userProfile);
+
+    const newUser = await this.userRepository.findOne({
+      where: {
+        id: user.id,
+      },
+      relations: ['profile'],
+    });
+
+    return newUser;
   }
 
   async findOne(where: FindOneOptions<User>): Promise<User> {
