@@ -145,6 +145,7 @@ export class AuthService {
         email: email,
         refreshToken: refreshToken,
       },
+      relations: ['profile'],
     });
 
     if (!user) {
