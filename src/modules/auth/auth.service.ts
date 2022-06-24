@@ -153,7 +153,7 @@ export class AuthService {
 
     const currentUser = new IUser();
     currentUser.id = user.id;
-    // currentUser.name = user.name;
+    currentUser.firstName = user.profile.firstName;
     currentUser.email = user.email;
 
     return currentUser;
