@@ -6,7 +6,7 @@ import { mock } from 'jest-mock-extended';
 import { Repository } from 'typeorm';
 
 import { ProfileController } from './profile.controller';
-import { User } from '../../../shared/entities/user.entity';
+import { User } from '@entities/user.entity';
 import { UserService } from '@users/users.service';
 
 const userBuilder = build<Partial<User>>({
