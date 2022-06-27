@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToClass, Type } from 'class-transformer';
 
-import { User } from '../../../shared/entities/user.entity';
-import { Profile } from '../../../shared/entities/profile.entity';
+import { User } from '@entities/user.entity';
+import { Profile } from '@entities/profile.entity';
 
 export class UserInfo {
   @ApiProperty()

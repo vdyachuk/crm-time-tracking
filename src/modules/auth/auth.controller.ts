@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, UseInterc
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUser } from '@users/users.decorator';
-import { User } from '../../shared/entities/user.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { JWTAuthGuard } from './guards/jwt-auth.guard';

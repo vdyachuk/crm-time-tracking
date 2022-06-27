@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
 
-import { Project } from '../../../shared/entities/project.entity';
 import { ProjectInput } from '../model';
 import { JoiValidationPipe } from '../../../shared/pipe/joi-validation.pipe';
 
