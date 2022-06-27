@@ -18,9 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@entities/*": ["./src/entities/*"],
-      "@guards/*": ["./src/guards/*"],
-      "@interseptors/*": ["./src/interseptors/*"],
+      "@entities/*": ["./src/shared/entities/*"],
+      "@guards/*": ["./src/shared/guards/*"],
+      "@interseptors/*": ["./src/shared/interseptors/*"],
+      "@config/*": ["./src/shared/config/*"],
+      "@interface/*": ["./src/common/interface/*"],
+      "@enums/*": ["./src/common/enums/*"],
       "@users/*": ["./src/modules/users/*"],
       "@auth/*": ["./src/modules/auth/*"],
       "@projects/*": ["./src/modules/projects/*"]

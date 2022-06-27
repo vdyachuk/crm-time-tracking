@@ -15,7 +15,7 @@ import { User, Client, Rate, LoggedDay, Department, Notification } from './index
 
 import { ProjectData } from '@projects/model';
 
-import { ProjectTypeEnum, ProjectStatusEnum } from '../../common/enums/project';
+import { ProjectStatusEnum, ProjectTypeEnum } from '@enums/project/index';
 
 @Entity('projects')
 export class Project {

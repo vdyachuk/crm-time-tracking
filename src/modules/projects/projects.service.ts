@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
 import { ProjectInput } from './model';
-import { ProjectRO } from '../../common/interface/projects.model';
+import { ProjectRO } from '@interface/projects.model';
 import { UpdateProjectDto } from './dto';
-import { Project } from '../../shared/entities/project.entity';
+import { Project } from '@entities/project.entity';
 
 @Injectable()
 export class ProjectsService {

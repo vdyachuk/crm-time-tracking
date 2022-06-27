@@ -3,14 +3,14 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as util from 'util';
 import * as crypto from 'crypto';
-import { IUser } from '../../common/interface/user.interface';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
-import { User } from '../../shared/entities/user.entity';
+import { User } from '@entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { JwtPayload } from '../../common/interface/jwt-payload.interface';
+import { JwtPayload } from '@interface/jwt-payload.interface';
+import { IUser } from '@interface/user.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
