@@ -13,7 +13,7 @@ export class ClientService {
   ) {}
 
   async createClient(dto: CreateClientDto) {
-    const user = await this.clientRepository.create(dto);
-    return user;
+    const client = await this.clientRepository.create(dto);
+    return client;
   }
 }
