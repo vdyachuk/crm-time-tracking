@@ -1,25 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
-import { ProjectInput } from './model';
+import { Repository, DeleteResult, In } from 'typeorm';
+
 import { ProjectRO } from '@interface/projects.model';
-import { UpdateProjectDto } from './dto';
-import { Project } from '@entities/project.entity';
+import { UpdateProjectDto, ProjectCreateDto } from './dto';
+import { Project, Client, User } from '@entities/index';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectsRepository: Repository<Project>,
+
+    @InjectRepository(Client)
+    private clientRepository: Repository<Client>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async getAll(): Promise<Project[]> {
     return this.projectsRepository.find();
   }
 
-  async create(input: ProjectInput): Promise<Project> {
-    const project = new Project();
-    project.name = input.name;
+  async create(data: ProjectCreateDto): Promise<Project> {
+    const client = await this.clientRepository.findOne({ where: { id: data.clientId } });
+
+    if (!client) {
+      throw new NotFoundException(`There isn't any client with id: ${data.clientId}`);
+    }
+
+    const users = await this.userRepository.findBy({ id: In(data.performerIds) });
+
+    const project = new Project({
+      ...data,
+      client,
+      users,
+    });
+
     return this.projectsRepository.save(project);
   }
 
