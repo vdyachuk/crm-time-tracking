@@ -32,4 +32,8 @@ export class Client {
 
   @OneToOne(() => Project)
   project: Project;
+
+  constructor(data: Partial<Client> = {}) {
+    Object.assign(this, data);
+  }
 }
