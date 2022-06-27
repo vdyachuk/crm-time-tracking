@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
 import { LoggedDayInput } from './model';
-import { LoggedDayRO } from '../../common/interface/logged.day.model';
+import { LoggedDayRO } from '@interface/logged.day.model';
 import { UpdateLoggedDayDto } from './dto';
-import { LoggedDay } from '../../shared/entities/loggedDay.entity';
+import { LoggedDay } from '@entities/loggedDay.entity';
 
 @Injectable()
 export class LoggedDaysService {
