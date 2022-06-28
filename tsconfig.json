@@ -26,7 +26,8 @@
       "@enums/*": ["./src/common/enums/*"],
       "@users/*": ["./src/modules/users/*"],
       "@auth/*": ["./src/modules/auth/*"],
-      "@projects/*": ["./src/modules/projects/*"]
+      "@projects/*": ["./src/modules/projects/*"],
+      "@strategies/*": ["./src/shared/strategies/*"]
     }
   }
 }

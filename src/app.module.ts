@@ -6,16 +6,10 @@ import { UserModule } from '@users/users.module';
 import { ProjectsModule } from '@projects/projects.module';
 import { AuthModule } from '@auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configService } from '@config/config.service';
+import { postgresConfig } from '@config/postgres.config';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    UserModule,
-    TerminusModule,
-    ProjectsModule,
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forRoot(postgresConfig), UserModule, TerminusModule, ProjectsModule, AuthModule],
   controllers: [HealthController],
   providers: [],
 })
