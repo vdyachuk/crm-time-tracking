@@ -20,7 +20,9 @@ export class ProjectsService {
   ) {}
 
   async getAll(): Promise<Project[]> {
-    return this.projectsRepository.find();
+    return this.projectsRepository.find({
+      relations: ['client', 'users'],
+    });
   }
 
   async create(data: CreateProjectDto): Promise<Project> {
@@ -49,10 +51,11 @@ export class ProjectsService {
     }
   }
 
-  async findById(id: string): Promise<ProjectRO> {
-    const project = await this.projectsRepository.findOne({ where: { id } });
-
-    return this.buildProjectRO(project);
+  async findById(id: string): Promise<Project> {
+    return await this.projectsRepository.findOne({
+      where: { id },
+      relations: ['client', 'users'],
+    });
   }
 
   async update(id: string, dto: UpdateProjectDto): Promise<Project> {
@@ -89,14 +92,5 @@ export class ProjectsService {
 
   async delete(id: string): Promise<DeleteResult> {
     return await this.projectsRepository.delete({ id: id });
-  }
-
-  private buildProjectRO(project: Project) {
-    const projectRO = {
-      id: project.id,
-      name: project.name,
-    };
-
-    return { project: projectRO };
   }
 }

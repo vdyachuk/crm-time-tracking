@@ -16,11 +16,23 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
-  @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectResponseDto })
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: ProjectResponseDto, isArray: true })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   public async getAll(): Promise<ProjectResponseDto[]> {
-    const project = await this.projectsService.getAll();
+    const projects = await this.projectsService.getAll();
 
-    return project.map((project) => ProjectResponseDto.mapFrom(project));
+    return ProjectResponseDto.mapFromMulti(projects);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: ProjectResponseDto })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  public async findById(@Param('id') projectId: string): Promise<ProjectResponseDto> {
+    const project = await this.projectsService.findById(projectId);
+
+    return ProjectResponseDto.mapFrom(project);
   }
 
   @Post()

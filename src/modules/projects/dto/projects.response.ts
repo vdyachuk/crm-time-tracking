@@ -30,4 +30,8 @@ export class ProjectResponseDto {
 
     return { ...project, client, users };
   }
+
+  public static mapFromMulti<P>(data: Project[]): ProjectResponseDto[] {
+    return data.map(ProjectResponseDto.mapFrom);
+  }
 }
