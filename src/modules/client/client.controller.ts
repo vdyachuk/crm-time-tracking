@@ -4,8 +4,8 @@ import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, A
 import { ClientCreateDto, ClientResponseDto, ClientUpdateDto } from './dto';
 import { ClientsService } from './client.service';
 
-@ApiTags('Clients')
 @Controller('clients')
+@ApiTags('Clients')
 export class ClientController {
   constructor(private clientsService: ClientsService) {}
 

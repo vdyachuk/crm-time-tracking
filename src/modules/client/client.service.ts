@@ -12,13 +12,7 @@ export class ClientsService {
   ) {}
 
   async create(data: ClientCreateDto): Promise<Client> {
-    const client = await this.clientsRepository.findOne({ where: { id: data.clientId } });
-
-    if (!client) {
-      throw new NotFoundException(`There isn't any client with id: ${data.clientId}`);
-    }
-
-    return this.clientsRepository.save(client);
+    return this.clientsRepository.save(data);
   }
   async getAll(): Promise<Client[]> {
     return this.clientsRepository.find();
