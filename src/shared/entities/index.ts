@@ -9,3 +9,4 @@ export * from './role.entity';
 export * from './notificationType.entity';
 export * from './roleNotificationType.entity';
 export * from './notification.entity';
+export * from './userProvider.entity';

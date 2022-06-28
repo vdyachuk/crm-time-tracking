@@ -11,9 +11,9 @@ import {
   ManyToMany,
 } from 'typeorm';
 
-import { Department, Rate, LoggedDay, Project, Role, Profile, Notification } from './index';
+import { Department, Rate, LoggedDay, Project, Role, Profile, Notification, UserProvider } from './index';
 
-import { UserStatusEnum, UserProviderEnum } from '@enums/user';
+import { UserStatusEnum } from '@enums/user';
 
 @Entity('users')
 export class User {
@@ -41,13 +41,6 @@ export class User {
     nullable: true,
   })
   salary: number;
-
-  @Column({
-    type: 'enum',
-    enum: UserProviderEnum,
-    default: UserProviderEnum.NATIVE,
-  })
-  provider: UserProviderEnum;
 
   @Column({
     type: 'enum',
@@ -81,6 +74,9 @@ export class User {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
+
+  @OneToMany(() => UserProvider, (userProvider) => userProvider.user)
+  userProviders: UserProvider[];
 
   @ManyToMany(() => Project)
   projects: Project[];

@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 import { User } from '@entities/user.entity';
 import { UserUpdate } from './dto/user-update.dto';
 import { Profile } from '@entities/profile.entity';
+
 import { SignUpDto } from '@auth/dto/sign-up.dto';
-import { Repository } from 'typeorm';
+import { UserSignUpInterface } from '@interface/user/user.sign-up.interface';
 
 @Injectable()
 export class UserService {
@@ -17,26 +18,20 @@ export class UserService {
     private readonly profileRepository: Repository<Profile>,
   ) {}
 
-  async create(data: SignUpDto): Promise<User> {
-    const user = new User(data);
-
-    await this.userRepository.save(user);
-
-    const userProfile = new Profile({
-      ...data,
-      user,
-    });
+  async create(data: UserSignUpInterface): Promise<User> {
+    const userProfile = new Profile();
+    userProfile.firstName = data.firstName;
+    userProfile.lastName = data.lastName;
 
     await this.profileRepository.save(userProfile);
 
-    const newUser = await this.userRepository.findOne({
-      where: {
-        id: user.id,
-      },
-      relations: ['profile'],
-    });
+    const user = new User();
+    user.password = data.password ?? data.password;
+    user.email = data.email;
+    user.profile = userProfile;
+    user.userProviders = data.userProviders;
 
-    return newUser;
+    return await this.userRepository.save(user);
   }
 
   async findOne(where: FindOneOptions<User>): Promise<User> {

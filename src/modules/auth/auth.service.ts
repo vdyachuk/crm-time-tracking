@@ -9,8 +9,8 @@ import { Request } from 'express';
 
 import { User } from '@entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { JwtPayload } from '@interface/jwt-payload.interface';
-import { IUser } from '@interface/user.interface';
+import { JwtPayload } from '@interface/jwt/jwt-payload.interface';
+import { UserInterface } from '@interface/user/user.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserInfo } from '@users/dto/response-user.dto';
@@ -139,7 +139,7 @@ export class AuthService {
     return user;
   }
 
-  public async validRefreshToken(email: string, refreshToken: string): Promise<IUser | null> {
+  public async validRefreshToken(email: string, refreshToken: string): Promise<UserInterface | null> {
     const user = await this.user.findOne({
       where: {
         email: email,
@@ -151,7 +151,7 @@ export class AuthService {
       throw new BadRequestException('Token expired');
     }
 
-    const currentUser = new IUser();
+    const currentUser = new UserInterface();
     currentUser.id = user.id;
     // currentUser.name = user.name;
     currentUser.email = user.email;

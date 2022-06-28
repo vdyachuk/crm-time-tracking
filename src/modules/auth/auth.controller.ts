@@ -1,16 +1,14 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { AuthUser } from '@users/users.decorator';
-import { User } from '@entities/user.entity';
+import { UserInfo } from '@users/dto/response-user.dto';
+
+import { JwtInterceptor } from '@interseptors/jwt.interceptor';
+import { TokenInterceptor } from '@interseptors/token.interceptor';
+
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
-import { JWTAuthGuard } from './guards/jwt-auth.guard';
-import { SessionAuthGuard } from './guards/session-auth.guard';
 import { SignInDto } from './dto/sign-in.dto';
-import { UserInfo } from '@users/dto/response-user.dto';
-import { TokenInterceptor } from 'src/shared/interseptors/token.interceptor';
-import { JwtInterceptor } from 'src/shared/interseptors/jwt.interceptor';
 
 @Controller('auth')
 @ApiTags('Authentication')
@@ -28,16 +26,9 @@ export class AuthController {
   }
 
   @Post('login')
-  // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(TokenInterceptor, JwtInterceptor)
   async login(@Body() signInDto: SignInDto): Promise<UserInfo> {
     return this.authService.login(signInDto);
-  }
-
-  @Get('/me')
-  @UseGuards(SessionAuthGuard, JWTAuthGuard)
-  me(@AuthUser() user: User): User {
-    return user;
   }
 }
