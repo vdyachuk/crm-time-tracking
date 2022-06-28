@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToClass, Type } from 'class-transformer';
 
-import { Client, Project } from '@entities/index';
+import { Client } from '@entities/index';
 
 export class ClientResponseDto {
   @ApiProperty()

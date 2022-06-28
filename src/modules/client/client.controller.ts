@@ -8,6 +8,7 @@ import { ClientsService } from './client.service';
 @Controller('clients')
 export class ClientController {
   constructor(private clientsService: ClientsService) {}
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOkResponse({ type: ClientResponseDto, description: 'Successfully created client' })
@@ -17,6 +18,7 @@ export class ClientController {
     const project = await this.clientsService.create(data);
     return ClientResponseDto.mapFrom(project);
   }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ClientResponseDto, isArray: true })
@@ -25,6 +27,7 @@ export class ClientController {
     const clients = await this.clientsService.getAll();
     return ClientResponseDto.mapFromMulti(clients);
   }
+
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'Successfully updated client' })
@@ -34,6 +37,7 @@ export class ClientController {
     const client = await this.clientsService.update(clientId, clientData);
     return ClientResponseDto.mapFrom(client);
   }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ClientResponseDto })
