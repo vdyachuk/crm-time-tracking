@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class UpdateProjectDto {
   @ApiProperty({ description: 'Project Name', example: 'Esta' })
@@ -8,7 +8,7 @@ export class UpdateProjectDto {
   name: string;
 
   @ApiProperty({ description: 'Client ID', example: '9878f24c-6b96-43cd-a1c4-69c66c875827' })
-  @IsString()
+  @IsUUID(4)
   @IsNotEmpty()
   clientId: string;
 
@@ -18,6 +18,6 @@ export class UpdateProjectDto {
     example: ['9878f24c-6b96-43cd-a1c4-69c66c875827'],
     description: 'Array of performer ids',
   })
-  @IsString({ each: true })
+  @IsUUID(4, { each: true })
   performerIds: String[];
 }

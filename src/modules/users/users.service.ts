@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 
 import { User } from '@entities/user.entity';
-import { UserUpdate } from './dto/users.update';
+import { UserUpdateDto } from './dto';
 import { Profile } from '@entities/profile.entity';
 
 import { SignUpDto } from '@auth/dto/sign-up.dto';
@@ -44,7 +44,7 @@ export class UserService {
     return user;
   }
 
-  async update(id: number, updates: UserUpdate): Promise<User> {
+  async update(id: number, updates: UserUpdateDto): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
 
     if (!user) {

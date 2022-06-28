@@ -1,11 +1,5 @@
-import { Controller, Body, HttpStatus, Post, Get, Put, Param, Delete, HttpCode } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiInternalServerErrorResponse,
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Body, HttpStatus, Post, Get, Put, Param, Delete, HttpCode, ParseUUIDPipe } from '@nestjs/common';
+import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateProjectDto, ProjectResponseDto, UpdateProjectDto } from './dto';
 import { ProjectsService } from './projects.service';
@@ -18,7 +12,6 @@ export class ProjectsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: ProjectResponseDto, isArray: true })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   public async getAll(): Promise<ProjectResponseDto[]> {
     const projects = await this.projectsService.getAll();
 
@@ -27,9 +20,9 @@ export class ProjectsController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiNotFoundResponse({ description: `There isn't any project with id` })
   @ApiOkResponse({ type: ProjectResponseDto })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  public async findById(@Param('id') projectId: string): Promise<ProjectResponseDto> {
+  public async findById(@Param('id', ParseUUIDPipe) projectId: string): Promise<ProjectResponseDto> {
     const project = await this.projectsService.findById(projectId);
 
     return ProjectResponseDto.mapFrom(project);
@@ -37,8 +30,7 @@ export class ProjectsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOkResponse({ type: ProjectResponseDto, description: 'Successfully created project' })
-  @ApiBadRequestResponse({ description: 'Incorrect data.' })
+  @ApiOkResponse({ type: ProjectResponseDto })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async create(@Body() data: CreateProjectDto): Promise<ProjectResponseDto> {
     const project = await this.projectsService.create(data);
@@ -47,17 +39,19 @@ export class ProjectsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ description: 'Successfully updated project' })
-  @ApiBadRequestResponse({ description: 'Incorrect data.' })
+  @ApiOkResponse({ type: ProjectResponseDto })
+  @ApiNotFoundResponse({ description: `There isn't any project with id` })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  async update(@Param('id') projectId: string, @Body() projectData: UpdateProjectDto) {
+  async update(@Param('id', ParseUUIDPipe) projectId: string, @Body() projectData: UpdateProjectDto) {
     const project = await this.projectsService.update(projectId, projectData);
     return ProjectResponseDto.mapFrom(project);
   }
 
   @Delete(':id')
-  @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectResponseDto })
-  async delete(@Param() params) {
-    return await this.projectsService.delete(params.id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOkResponse({})
+  @ApiNotFoundResponse({ description: `There isn't any project with id` })
+  async delete(@Param('id', ParseUUIDPipe) projectId: string) {
+    await this.projectsService.delete(projectId);
   }
 }
