@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 
 import { User } from '@entities/user.entity';
-import { UserUpdate } from './dto/user-update.dto';
+import { UserUpdate } from './dto/users.update';
 import { Profile } from '@entities/profile.entity';
 
 import { SignUpDto } from '@auth/dto/sign-up.dto';

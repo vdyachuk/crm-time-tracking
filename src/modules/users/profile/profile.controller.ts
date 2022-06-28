@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from '@users/users.service';
-import { UserUpdate } from '@users/dto/user-update.dto';
+import { UserUpdate } from '@users/dto/users.update';
 import { JWTAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { SessionAuthGuard } from '@auth/guards/session-auth.guard';
 import { User } from '@entities/user.entity';

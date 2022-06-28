@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { ProjectCreateDto, ProjectResponseDto, UpdateProjectDto } from './dto';
+import { CreateProjectDto, ProjectResponseDto, UpdateProjectDto } from './dto';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
@@ -28,15 +28,19 @@ export class ProjectsController {
   @ApiOkResponse({ type: ProjectResponseDto, description: 'Successfully created project' })
   @ApiBadRequestResponse({ description: 'Incorrect data.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  async create(@Body() data: ProjectCreateDto): Promise<ProjectResponseDto> {
+  async create(@Body() data: CreateProjectDto): Promise<ProjectResponseDto> {
     const project = await this.projectsService.create(data);
     return ProjectResponseDto.mapFrom(project);
   }
 
   @Put(':id')
-  @ApiResponse({ status: HttpStatus.OK, isArray: true, type: ProjectResponseDto })
-  async update(@Param('id') projectId: string, @Body('project') projectData: UpdateProjectDto) {
-    return await this.projectsService.update(projectId, projectData);
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: 'Successfully updated project' })
+  @ApiBadRequestResponse({ description: 'Incorrect data.' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  async update(@Param('id') projectId: string, @Body() projectData: UpdateProjectDto) {
+    const project = await this.projectsService.update(projectId, projectData);
+    return ProjectResponseDto.mapFrom(project);
   }
 
   @Delete(':id')

@@ -13,7 +13,7 @@ import { JwtPayload } from '@interface/jwt/jwt-payload.interface';
 import { UserInterface } from '@interface/user/user.interface';
 import { UserService } from '@users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
-import { UserInfo } from '@users/dto/response-user.dto';
+import { UserInfo } from '@users/dto/users.response';
 import { InjectRepository } from '@nestjs/typeorm';
 
 const encryptIterations = 50000;
