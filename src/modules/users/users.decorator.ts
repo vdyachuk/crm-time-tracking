@@ -6,5 +6,8 @@ import { User } from '@entities/user.entity';
 export const AuthUser = createParamDecorator((data: keyof User, ctx: ExecutionContext) => {
   const user = ctx.switchToHttp().getRequest<Request>().user as User;
 
+  delete user.password;
+  delete user.refreshToken;
+
   return data ? user && user[data] : user;
 });

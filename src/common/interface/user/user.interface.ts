@@ -1,4 +1,4 @@
-export class IUser {
+export class UserInterface {
   id: number;
   firstName: string;
   email: string;
