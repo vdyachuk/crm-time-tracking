@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Client } from '../../shared/entities/client.entity';
 import { CreateClientDto } from './dto/create-client.dto';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 
 @Injectable()
 export class ClientService {
@@ -15,5 +15,8 @@ export class ClientService {
   async createClient(dto: CreateClientDto) {
     const client = await this.clientRepository.create(dto);
     return client;
+  }
+  async deleteClient(id: string): Promise<DeleteResult> {
+    return await this.clientRepository.delete({ id });
   }
 }
