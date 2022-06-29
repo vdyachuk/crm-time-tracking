@@ -7,9 +7,17 @@ import { ProjectsModule } from '@projects/projects.module';
 import { AuthModule } from '@auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { postgresConfig } from '@config/postgres.config';
+import { ClientModule } from './modules/client/client.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(postgresConfig), UserModule, TerminusModule, ProjectsModule, AuthModule],
+  imports: [
+    TypeOrmModule.forRoot(postgresConfig),
+    UserModule,
+    TerminusModule,
+    ProjectsModule,
+    AuthModule,
+    ClientModule,
+  ],
   controllers: [HealthController],
   providers: [],
 })
