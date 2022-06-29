@@ -24,4 +24,8 @@ export class UserInfo {
 
     return { ...user, profile };
   }
+
+  public static mapFromMulti<P>(data: User[]): UserInfo[] {
+    return data.map(UserInfo.mapFrom);
+  }
 }

@@ -1,6 +1,6 @@
 import { IsDefined, IsString, IsNotEmpty } from 'class-validator';
 
-export class UserUpdate {
+export class UserUpdateDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()

@@ -1,51 +1,107 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
-import { ProjectInput } from './model';
-import { ProjectRO } from '@interface/projects.model';
-import { UpdateProjectDto } from './dto';
-import { Project } from '@entities/project.entity';
+import { Repository, DeleteResult, In } from 'typeorm';
+
+import { UpdateProjectDto, CreateProjectDto } from './dto';
+import { Project, Client, User } from '@entities/index';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectsRepository: Repository<Project>,
+
+    @InjectRepository(Client)
+    private clientRepository: Repository<Client>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async getAll(): Promise<Project[]> {
-    return this.projectsRepository.find();
+    return this.projectsRepository.find({
+      relations: ['client', 'users'],
+    });
   }
 
-  async create(input: ProjectInput): Promise<Project> {
-    const project = new Project();
-    project.name = input.name;
-    return this.projectsRepository.save(project);
+  async create(data: CreateProjectDto): Promise<Project> {
+    try {
+      const client = await this.clientRepository.findOne({ where: { id: data.clientId } });
+
+      if (!client) {
+        throw new NotFoundException(`There isn't any client with id: ${data.clientId}`);
+      }
+
+      let users: User[] = [];
+
+      if (data.performerIds.length) {
+        users = await this.userRepository.findBy({ id: In(data.performerIds) });
+      }
+
+      const project = new Project({
+        ...data,
+        client,
+        users,
+      });
+
+      return await this.projectsRepository.save(project);
+    } catch (e) {
+      Logger.error('Project:create:', e);
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 
-  async findById(id: string): Promise<ProjectRO> {
-    const project = await this.projectsRepository.findOne({ where: { id } });
-
-    return this.buildProjectRO(project);
+  async findById(id: string): Promise<Project> {
+    return await this.projectsRepository.findOne({
+      where: { id },
+      relations: ['client', 'users'],
+    });
   }
 
   async update(id: string, dto: UpdateProjectDto): Promise<Project> {
-    const toUpdate = await this.projectsRepository.findOne({ where: { id } });
+    try {
+      const project = await this.projectsRepository.findOne({ where: { id } });
 
-    const updated = Object.assign(toUpdate, dto);
-    return await this.projectsRepository.save(updated);
+      if (!project) {
+        throw new NotFoundException(`There isn't any project with id: ${id}`);
+      }
+
+      const client = await this.clientRepository.findOne({ where: { id: dto.clientId } });
+
+      if (!client) {
+        throw new NotFoundException(`There isn't any client with id: ${dto.clientId}`);
+      }
+
+      let users: User[] = [];
+
+      if (dto.performerIds.length) {
+        users = await this.userRepository.findBy({ id: In(dto.performerIds) });
+      }
+
+      return await this.projectsRepository.save({
+        ...project,
+        name: dto.name,
+        client,
+        users,
+      });
+    } catch (e) {
+      Logger.error('Project:update:', e);
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return await this.projectsRepository.delete({ id: id });
-  }
+    try {
+      const project = await this.projectsRepository.findOne({ where: { id } });
 
-  private buildProjectRO(project: Project) {
-    const projectRO = {
-      id: project.id,
-      name: project.name,
-    };
+      if (!project) {
+        throw new NotFoundException(`There isn't any project with id: ${id}`);
+      }
 
-    return { project: projectRO };
+      return await this.projectsRepository.delete({ id });
+    } catch (e) {
+      Logger.error('Project:delete:', e);
+      throw new InternalServerErrorException('Internal server error');
+    }
   }
 }

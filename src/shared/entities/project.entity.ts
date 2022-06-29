@@ -12,9 +12,6 @@ import {
 } from 'typeorm';
 
 import { User, Client, Rate, LoggedDay, Department, Notification } from './index';
-
-import { ProjectData } from '@projects/model';
-
 import { ProjectStatusEnum, ProjectTypeEnum } from '@enums/project/index';
 
 @Entity('projects')
@@ -68,10 +65,7 @@ export class Project {
   @JoinTable()
   users: User[];
 
-  public buildData(): ProjectData {
-    return {
-      id: this.id,
-      name: this.name,
-    };
+  constructor(data: Partial<Project> = {}) {
+    Object.assign(this, data);
   }
 }
