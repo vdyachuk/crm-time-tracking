@@ -18,15 +18,8 @@ export class ClientsService {
     return this.clientsRepository.find();
   }
   async update(id: string, dto: ClientUpdateDto): Promise<Client> {
-    const client = await this.clientsRepository.findOne({ where: { id: dto.clientId } });
+    const client = await this.clientsRepository.findOne({ where: { id } });
 
-    if (!client) {
-      throw new NotFoundException(`There isn't any client with id: ${id}`);
-    }
-    if (!client) {
-      throw new NotFoundException(`There isn't any client with id: ${dto.clientId}`);
-    }
-    client.name = dto.name;
     try {
       return await this.clientsRepository.save({
         ...client,
