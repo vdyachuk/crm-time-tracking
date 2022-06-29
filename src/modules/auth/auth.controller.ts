@@ -1,14 +1,12 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { UserInfo } from '@users/dto/response-user.dto';
-
 import { JwtInterceptor } from '@interseptors/jwt.interceptor';
 import { TokenInterceptor } from '@interseptors/token.interceptor';
-
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { UserInfo } from '@users/dto/users.response';
 
 @Controller('auth')
 @ApiTags('Authentication')

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from '@users/users.service';
-import { UserUpdate } from '@users/dto/user-update.dto';
+import { UserUpdateDto } from '@users/dto';
 import { JWTAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { SessionAuthGuard } from '@auth/guards/session-auth.guard';
 import { User } from '@entities/user.entity';
@@ -28,7 +28,7 @@ export class ProfileController {
   }
 
   @Put(':id')
-  update(@Param('id', new ParseIntPipe()) id: number, @Body() updatesUser: UserUpdate): Promise<User> {
+  update(@Param('id', new ParseIntPipe()) id: number, @Body() updatesUser: UserUpdateDto): Promise<User> {
     return this.userService.update(id, updatesUser);
   }
 }
